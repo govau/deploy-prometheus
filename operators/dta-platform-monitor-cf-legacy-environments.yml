@@ -1,0 +1,144 @@
+
+# Exporter jobs
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf_firehose_legacy_staging
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Support
+    jobs:
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((legacy_staging_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_staging))"
+              deployment_name: cf
+            metrics:
+              environment: ((legacy_staging_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((legacy_staging_doppler_url))
+              subscription_id: ((legacy_staging_metrics_environment))-root
+              max_retry_count: 300
+            uaa:
+              url: ((legacy_staging_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_staging))"
+            metrics:
+              environment: ((((legacy_staging_metrics_environment))))
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf_firehose_legacy_platform
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Support
+    jobs:
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((legacy_platform_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_platform))"
+              deployment_name: cf
+            metrics:
+              environment: ((legacy_platform_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((legacy_platform_doppler_url))
+              subscription_id: ((legacy_platform_metrics_environment))-root
+              max_retry_count: 300
+            uaa:
+              url: ((legacy_platform_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_platform))"
+            metrics:
+              environment: ((((legacy_platform_metrics_environment))))
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf_firehose_z_cld
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Support
+    jobs:
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((z_cld_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_z_cld))"
+              deployment_name: cf
+            metrics:
+              environment: ((z_cld_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((z_cld_doppler_url))
+              subscription_id: ((z_cld_metrics_environment))-root
+              max_retry_count: 300
+            uaa:
+              url: ((z_cld_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_z_cld))"
+            metrics:
+              environment: ((z_cld_metrics_environment))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cf_exporter_secret_staging
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cf_exporter_secret_platform
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cf_exporter_secret_z_cld
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_firehose_exporter_secret_staging
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_firehose_exporter_secret_platform
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_firehose_exporter_secret_z_cld
+    type: password
