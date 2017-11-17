@@ -1,0 +1,163 @@
+
+# Prometheus Alerts
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=cloudfoundry_alerts?/release
+  value: prometheus
+
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/rule_files/-
+  value: /var/vcap/jobs/cloudfoundry_alerts/*.alerts
+
+# Grafana Dashboards
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=cloudfoundry_dashboards?/release
+  value: prometheus
+
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=grafana/properties/grafana/prometheus/dashboard_files/-
+  value: /var/vcap/jobs/cloudfoundry_dashboards/*.json
+
+
+# Exporter jobs
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf_firehose_b_cld
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Support
+    jobs:
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((b_cld_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_b_cld))"
+              deployment_name: cf
+            metrics:
+              environment: ((b_cld_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((b_cld_doppler_url))
+              subscription_id: ((b_cld_metrics_environment))-root
+              max_retry_count: 300
+            uaa:
+              url: ((b_cld_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_b_cld))"
+            metrics:
+              environment: ((b_cld_metrics_environment))
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf_firehose_d_cld
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Support
+    jobs:
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((d_cld_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_b_cld))"
+              deployment_name: cf
+            metrics:
+              environment: ((d_cld_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((d_cld_doppler_url))
+              subscription_id: ((d_cld_metrics_environment))-root
+              max_retry_count: 300
+            uaa:
+              url: ((d_cld_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_b_cld))"
+            metrics:
+              environment: ((d_cld_metrics_environment))
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: cf_firehose_y_cld
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Support
+    jobs:
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((y_cld_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_y_cld))"
+              deployment_name: cf
+            metrics:
+              environment: ((y_cld_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((y_cld_doppler_url))
+              subscription_id: ((y_cld_metrics_environment))-root
+              max_retry_count: 300
+            uaa:
+              url: ((y_cld_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_y_cld))"
+            metrics:
+              environment: ((y_cld_metrics_environment))
+
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cf_exporter_secret_b_cld
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cf_exporter_secret_d_cld
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_cf_exporter_secret_y_cld
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_firehose_exporter_secret_b_cld
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_firehose_exporter_secret_d_cld
+    type: password
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_firehose_exporter_secret_y_cld
+    type: password
