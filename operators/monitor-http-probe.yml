@@ -1,0 +1,129 @@
+# This file assumes bosh_exporter based Service Discovery is being used: ./monitor-bosh.yml
+
+# Exporter jobs
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/-
+  value:
+    name: blackbox_exporter
+    release: prometheus
+    properties:
+      blackbox_exporter:
+        config:
+          modules:
+            http_301:
+              prober: http
+              timeout: 5s
+              http:
+                valid_status_codes: [301]
+                no_follow_redirects: true
+                fail_if_ssl: true
+                fail_if_not_ssl: false
+                preferred_ip_protocol: "ip4"
+            https_200:
+              prober: http
+              timeout: 5s
+              http:
+                valid_status_codes: [200]
+                no_follow_redirects: true
+                fail_if_ssl: false
+                fail_if_not_ssl: true
+                preferred_ip_protocol: "ip4"
+            https_301:
+              prober: http
+              timeout: 5s
+              http:
+                valid_status_codes: [301]
+                no_follow_redirects: true
+                fail_if_ssl: false
+                fail_if_not_ssl: true
+                preferred_ip_protocol: "ip4"
+# Prometheus Scrape Config
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  value:
+    job_name: blackbox_http_200
+    metrics_path: /probe
+    params:
+      module:
+        - http_301
+    static_configs:
+      - targets: ((http_301_probe_endpoints))
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (.*)
+        target_label: __param_target
+        replacement: ${1}
+      - source_labels: [__param_target]
+        regex: (.*)
+        target_label: instance
+        replacement: ${1}
+      - source_labels: []
+        regex: .*
+        target_label: __address__
+        replacement: localhost:9115
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  value:
+    job_name: blackbox_https_200
+    metrics_path: /probe
+    params:
+      module:
+        - https_200
+    static_configs:
+      - targets: ((https_200_probe_endpoints))
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (.*)
+        target_label: __param_target
+        replacement: ${1}
+      - source_labels: [__param_target]
+        regex: (.*)
+        target_label: instance
+        replacement: ${1}
+      - source_labels: []
+        regex: .*
+        target_label: __address__
+        replacement: localhost:9115
+
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  value:
+    job_name: blackbox_https_301
+    metrics_path: /probe
+    params:
+      module:
+        - https_301
+    static_configs:
+      - targets: ((https_301_probe_endpoints))
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (.*)
+        target_label: __param_target
+        replacement: ${1}
+      - source_labels: [__param_target]
+        regex: (.*)
+        target_label: instance
+        replacement: ${1}
+      - source_labels: []
+        regex: .*
+        target_label: __address__
+        replacement: localhost:9115
+
+
+# Prometheus Alerts
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=probe_alerts?/release
+  value: prometheus
+
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/rule_files/-
+  value: /var/vcap/jobs/probe_alerts/*.alerts
+
+# Grafana Dashboards
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=probe_dashboards?/release
+  value: prometheus
+
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=grafana/properties/grafana/prometheus/dashboard_files/-
+  value: /var/vcap/jobs/probe_dashboards/*.json
