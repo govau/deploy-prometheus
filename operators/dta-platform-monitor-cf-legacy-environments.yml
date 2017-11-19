@@ -3,7 +3,7 @@
 - type: replace
   path: /instance_groups/-
   value:
-    name: cf_firehose_legacy_staging
+    name: cf_firehose_((legacy_staging_metrics_environment))
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: small
@@ -36,11 +36,11 @@
               client_id: firehose_exporter
               client_secret: "((uaa_clients_firehose_exporter_secret_staging))"
             metrics:
-              environment: ((((legacy_staging_metrics_environment))))
+              environment: ((legacy_staging_metrics_environment))
 - type: replace
   path: /instance_groups/-
   value:
-    name: cf_firehose_legacy_platform
+    name: cf_firehose_((legacy_platform_metrics_environment))
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: small
@@ -73,11 +73,11 @@
               client_id: firehose_exporter
               client_secret: "((uaa_clients_firehose_exporter_secret_platform))"
             metrics:
-              environment: ((((legacy_platform_metrics_environment))))
+              environment: ((legacy_platform_metrics_environment))
 - type: replace
   path: /instance_groups/-
   value:
-    name: cf_firehose_z_cld
+    name: cf_firehose_((z_cld_metrics_environment))
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: small

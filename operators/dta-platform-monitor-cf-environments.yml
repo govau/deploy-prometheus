@@ -22,7 +22,7 @@
 - type: replace
   path: /instance_groups/-
   value:
-    name: cf_firehose_b_cld
+    name: cf_firehose_((b_cld_metrics_environment))
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: small
@@ -59,7 +59,7 @@
 - type: replace
   path: /instance_groups/-
   value:
-    name: cf_firehose_d_cld
+    name: cf_firehose_((d_cld_metrics_environment))
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: small
@@ -75,7 +75,7 @@
             cf:
               api_url: ((d_cld_api_url))
               client_id: cf_exporter
-              client_secret: "((uaa_clients_cf_exporter_secret_b_cld))"
+              client_secret: "((uaa_clients_cf_exporter_secret_d_cld))"
               deployment_name: cf
             metrics:
               environment: ((d_cld_metrics_environment))
@@ -90,13 +90,13 @@
             uaa:
               url: ((d_cld_uaa_url))
               client_id: firehose_exporter
-              client_secret: "((uaa_clients_firehose_exporter_secret_b_cld))"
+              client_secret: "((uaa_clients_firehose_exporter_secret_d_cld))"
             metrics:
               environment: ((d_cld_metrics_environment))
 - type: replace
   path: /instance_groups/-
   value:
-    name: cf_firehose_y_cld
+    name: cf_firehose_((y_cld_metrics_environment))
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: small
