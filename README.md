@@ -8,7 +8,7 @@ The BOSH release deploys the following monitoring tools - [Prometheus](<https://
 ## Usage
 
 ### Setting up local BOSH environment
-The instructions for deploying a local BOSH2 director are [here](../setup-local-bosh.md)
+The instructions for deploying a local BOSH2 director are [here](https://github.com/cloudfoundry/bosh-deployment)
 
 ### Basic deployment
 The [prometheus boshrelease](https://github.com/cloudfoundry-community/prometheus-boshrelease) provides great documentation as well as the core BOSH deployment manifest and standard operator files.  
