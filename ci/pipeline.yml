@@ -18,15 +18,15 @@ resources:
 - name: deploy-prometheus.git
   type: git
   source:
-    branch: initial-pipeline
+    branch: master
     uri: https://github.com/govau/deploy-prometheus.git
 - name: ops.git
   type: git
   source:
-    branch: monitoring-endpoints
+    branch: master
     paths:
     - monitoring/probe_endpoints.yml
-    private_key: {{ops-git-deploy-key}}
+    private_key: ((ops-git-deploy-key))
     uri: git@github.com:AusDTO/ops.git
 - name: slack
   type: slack-notification
