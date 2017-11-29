@@ -1,0 +1,82 @@
+---
+# Update Network name, persistent volumes and instance types for basic prometheus deployment
+
+# Deploy to the Support Network in AWS
+- type: replace
+  path: /instance_groups/name=alertmanager/networks/name=default/name?
+  value: Support
+
+- type: replace
+  path: /instance_groups/name=prometheus/networks/name=default/name?
+  value: Support
+
+- type: replace
+  path: /instance_groups/name=database/networks/name=default/name?
+  value: Support
+
+- type: replace
+  path: /instance_groups/name=grafana/networks/name=default/name?
+  value: Support
+
+- type: replace
+  path: /instance_groups/name=nginx/networks/name=default/name?
+  value: Support
+
+# Update storage volume sizes for persistent services
+- type: replace
+  path: /instance_groups/name=alertmanager/persistent_disk_type?
+  value: 10GB
+
+- type: replace
+  path: /instance_groups/name=prometheus/persistent_disk_type?
+  value: 10GB
+
+- type: replace
+  path: /instance_groups/name=database/persistent_disk_type?
+  value: 10GB
+
+- type: replace
+  path: /instance_groups/name=grafana/persistent_disk_type?
+  value: 10GB
+
+# add monitoring vm_extension to instances (for security groups)
+- type: replace
+  path: /instance_groups/name=alertmanager/vm_extensions?/-
+  value: monitoring
+
+- type: replace
+  path: /instance_groups/name=prometheus/vm_extensions?/-
+  value: monitoring
+
+- type: replace
+  path: /instance_groups/name=database/vm_extensions?/-
+  value: monitoring
+
+- type: replace
+  path: /instance_groups/name=grafana/vm_extensions?/-
+  value: monitoring
+
+- type: replace
+  path: /instance_groups/name=nginx/vm_extensions?/-
+  value: monitoring
+
+# deploy small instances
+- type: replace
+  path: /instance_groups/name=alertmanager/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=prometheus/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=database/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=grafana/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=nginx/vm_type?
+  value: small

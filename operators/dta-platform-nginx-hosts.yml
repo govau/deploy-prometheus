@@ -1,0 +1,132 @@
+---
+# replace single nginx instance with 3 instances in a public subnet
+# - prometheus
+# - alertmanager
+# - grafana
+# nginx instances have HTTPS termination support thanks to https://github.com/govau/instant-https-boshrelease
+- type: replace
+  path: /releases/-
+  value:
+    name: instant-https
+    url: https://github.com/govau/instant-https-boshrelease/releases/download/v0.4.0/instant-https-0.4.0.tgz
+    sha1: f603d51ce64efb0145a2842245404946782b1827
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  value:
+    nginx: {from: nginx-grafana}
+
+# remove standard nginx host
+- type: remove
+  path: /instance_groups/name=nginx
+  value:
+
+# add 3 new nginx hosts
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nginx-prometheus
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Public
+        default: [dns, gateway, addressable]
+      - name: Internet
+        static_ips: [((prometheus_external_ip))]
+    jobs:
+      - name: nginx
+        release: prometheus
+        provides:
+          nginx: {as: nginx-prometheus}
+        properties:
+          nginx:
+            alertmanager:
+              auth_username: admin
+              auth_password: ((alertmanager_password))
+            prometheus:
+              auth_username: admin
+              auth_password: ((prometheus_password))
+      - name: proxy
+        release: instant-https
+        properties:
+          hostname: ((prometheus_external_hostname))
+          contact_email: weboperations@digital.gov.au
+          acme_url: https://acme-v01.api.letsencrypt.org/directory
+          backends:
+            - localhost:9090
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nginx-alertmanager
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Public
+        default: [dns, gateway, addressable]
+      - name: Internet
+        static_ips: [((alertmanager_external_ip))]
+    jobs:
+      - name: nginx
+        release: prometheus
+        provides:
+          nginx: {as: nginx-alertmanager}
+        properties:
+          nginx:
+            alertmanager:
+              auth_username: admin
+              auth_password: ((alertmanager_password))
+            prometheus:
+              auth_username: admin
+              auth_password: ((prometheus_password))
+      - name: proxy
+        release: instant-https
+        properties:
+          hostname: ((alertmanager_external_hostname))
+          contact_email: weboperations@digital.gov.au
+          acme_url: https://acme-v01.api.letsencrypt.org/directory
+          backends:
+            - localhost:9093
+
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: nginx-grafana
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    stemcell: default
+    vm_extensions: [monitoring]
+    networks:
+      - name: Public
+        default: [dns, gateway, addressable]
+      - name: Internet
+        static_ips: [((grafana_external_ip))]
+    jobs:
+      - name: nginx
+        release: prometheus
+        provides:
+          nginx: {as: nginx-grafana}
+        properties:
+          nginx:
+            alertmanager:
+              auth_username: admin
+              auth_password: ((alertmanager_password))
+            prometheus:
+              auth_username: admin
+              auth_password: ((prometheus_password))
+      - name: proxy
+        release: instant-https
+        properties:
+          hostname: ((grafana_external_hostname))
+          contact_email: weboperations@digital.gov.au
+          acme_url: https://acme-v01.api.letsencrypt.org/directory
+          backends:
+            - localhost:3000
