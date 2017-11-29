@@ -67,7 +67,7 @@
 
 - type: replace
   path: /instance_groups/name=prometheus/vm_type?
-  value: small
+  value: c4.large
 
 - type: replace
   path: /instance_groups/name=database/vm_type?
