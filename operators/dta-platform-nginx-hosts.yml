@@ -45,11 +45,13 @@
         properties:
           nginx:
             alertmanager:
-              auth_username: admin
-              auth_password: ((alertmanager_password))
+              auth_users:
+                - name: admin
+                  password: ((alertmanager_password))
             prometheus:
-              auth_username: admin
-              auth_password: ((prometheus_password))
+              auth_users:
+                - name: admin
+                  password: ((prometheus_password))
       - name: proxy
         release: instant-https
         properties:
