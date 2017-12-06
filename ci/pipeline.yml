@@ -8,13 +8,13 @@ resources:
   type: github-release
   source:
     access_token: ((github-read-public-repos-token))
-    owner: cloudfoundry-community
+    owner: bosh-prometheus
     repository: prometheus-boshrelease
 - name: prometheus-boshrelease.git
   type: git
   source:
     branch: master
-    uri: https://github.com/cloudfoundry-community/prometheus-boshrelease.git
+    uri: https://github.com/bosh-prometheus/prometheus-boshrelease.git
 - name: deploy-prometheus.git
   type: git
   source:
@@ -68,6 +68,7 @@ jobs:
       trigger: true
     - get: prometheus-boshrelease.git
     - get: deploy-prometheus.git
+      trigger: true
   on_failure:
     put: slack
     params:
@@ -110,6 +111,7 @@ jobs:
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
+      - deploy-prometheus.git/operators/bosh-exporter-fix.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
       stemcells:
@@ -224,6 +226,7 @@ jobs:
       - deploy-prometheus.git/operators/dta-platform-monitor-cf-environments.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-cf-legacy-environments.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
+      - deploy-prometheus.git/operators/bosh-exporter-fix.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
       stemcells:
