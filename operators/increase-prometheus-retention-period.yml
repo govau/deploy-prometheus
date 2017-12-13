@@ -1,0 +1,6 @@
+---
+# increase local retention period in prometheus form 15 days to 1 year
+
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/storage?/local?/retention?
+  value: "365"
