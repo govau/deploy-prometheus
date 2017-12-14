@@ -105,13 +105,14 @@ jobs:
   - put: deployment-dev
     params:
       manifest: prometheus-boshrelease.git/manifests/prometheus.yml
-      no_redact: true
       ops_files:
       - prometheus-boshrelease.git/manifests/operators/monitor-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/bosh-exporter-fix.yml
+      - deploy-prometheus.git/operators/increase-prometheus-retention-period.yml
+      - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
       stemcells:
@@ -219,7 +220,8 @@ jobs:
       ops_files:
       - prometheus-boshrelease.git/manifests/operators/monitor-bosh.yml
       - prometheus-boshrelease.git/manifests/operators/alertmanager-web-external-url.yml
-      # - prometheus-boshrelease.git/manifests/operators/alertmanager-slack-receiver.yml
+      - prometheus-boshrelease.git/manifests/operators/prometheus-web-external-url.yml
+      - prometheus-boshrelease.git/manifests/operators/alertmanager-slack-receiver.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
@@ -227,6 +229,8 @@ jobs:
       - deploy-prometheus.git/operators/dta-platform-monitor-cf-legacy-environments.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/bosh-exporter-fix.yml
+      - deploy-prometheus.git/operators/increase-prometheus-retention-period.yml
+      - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
       stemcells:
@@ -235,6 +239,7 @@ jobs:
         alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_slack_channel: ((alertmanager_slack_channel))
         alertmanager_web_external_url: ((alertmanager_web_external_url))
+        prometheus_web_external_url: ((prometheus_web_external_url))
         bosh_ca_cert: ((bosh_ca_cert))
         bosh_password: ((bosh_client_secret))
         bosh_url: ((bosh_target))
@@ -266,8 +271,6 @@ jobs:
         legacy_platform_metrics_environment: ((legacy_platform_metrics_environment))
         legacy_platform_doppler_url: ((legacy_platform_doppler_url))
         legacy_platform_uaa_url: ((legacy_platform_uaa_url))
-      # dry_run: true
-      no_redact: true
       vars_files:
       - dns-details/dns-vars.yml
       - ops.git/monitoring/probe_endpoints.yml
