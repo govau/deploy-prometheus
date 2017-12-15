@@ -1,0 +1,6 @@
+---
+# increase scrape_timeout (default is 10s)
+
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_timeout?
+  value: "20s"

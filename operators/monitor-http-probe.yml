@@ -39,7 +39,7 @@
                 preferred_ip_protocol: "ip4"
             https_200_slow:
               prober: http
-              timeout: 60s
+              timeout: 20s # setting to match the global prometheus scrape-timeout
               http:
                 valid_status_codes: [200]
                 no_follow_redirects: true
