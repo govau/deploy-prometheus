@@ -111,7 +111,6 @@ jobs:
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/bosh-exporter-fix.yml
-      - deploy-prometheus.git/operators/increase-prometheus-retention-period.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
@@ -229,7 +228,6 @@ jobs:
       - deploy-prometheus.git/operators/dta-platform-monitor-cf-legacy-environments.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/bosh-exporter-fix.yml
-      - deploy-prometheus.git/operators/increase-prometheus-retention-period.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
