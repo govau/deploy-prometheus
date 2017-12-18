@@ -23,6 +23,22 @@
   value: Support
 
 # Update storage volume sizes for persistent services
+
+# prometheus-boshrelease sets volume size using persistent_disk, so we remove
+# these defaults and then set using persistent_disk_type to match our cloud-config.
+
+- type: remove
+  path: /instance_groups/name=alertmanager/persistent_disk
+
+- type: remove
+  path: /instance_groups/name=prometheus/persistent_disk
+
+- type: remove
+  path: /instance_groups/name=database/persistent_disk
+
+- type: remove
+  path: /instance_groups/name=grafana/persistent_disk
+
 - type: replace
   path: /instance_groups/name=alertmanager/persistent_disk_type?
   value: 10GB
