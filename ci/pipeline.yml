@@ -225,7 +225,6 @@ jobs:
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-cf-environments.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-cf-legacy-environments.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/bosh-exporter-fix.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
@@ -257,18 +256,6 @@ jobs:
         b_cld_metrics_environment: ((b_cld_metrics_environment))
         b_cld_doppler_url: ((b_cld_doppler_url))
         b_cld_uaa_url: ((b_cld_uaa_url))
-        z_cld_api_url: ((z_cld_api_url))
-        z_cld_metrics_environment: ((z_cld_metrics_environment))
-        z_cld_doppler_url: ((z_cld_doppler_url))
-        z_cld_uaa_url: ((z_cld_uaa_url))
-        legacy_staging_api_url: ((legacy_staging_api_url))
-        legacy_staging_metrics_environment: ((legacy_staging_metrics_environment))
-        legacy_staging_doppler_url: ((legacy_staging_doppler_url))
-        legacy_staging_uaa_url: ((legacy_staging_uaa_url))
-        legacy_platform_api_url: ((legacy_platform_api_url))
-        legacy_platform_metrics_environment: ((legacy_platform_metrics_environment))
-        legacy_platform_doppler_url: ((legacy_platform_doppler_url))
-        legacy_platform_uaa_url: ((legacy_platform_uaa_url))
       vars_files:
       - dns-details/dns-vars.yml
       - ops.git/monitoring/probe_endpoints.yml

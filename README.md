@@ -25,6 +25,3 @@ replace the single nginx host with 3 nginx hosts with instant-https support runn
 
 #### [dta-platform-dev](operators/dta-platform-cf-environments.yml)
 run cf-exports and firehose-exporters for the cloud.gov.au environments
-
-#### [dta-platform-dev](operators/dta-platform-cf-legacy-environments.yml)
-run cf-exports and firehose-exporters for the legacy cloud.gov.au environments - to be removed once they are decommissioned.
