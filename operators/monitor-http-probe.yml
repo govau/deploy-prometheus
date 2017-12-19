@@ -37,6 +37,15 @@
                 fail_if_ssl: false
                 fail_if_not_ssl: true
                 preferred_ip_protocol: "ip4"
+            https_302:
+              prober: http
+              timeout: 5s
+              http:
+                valid_status_codes: [302]
+                no_follow_redirects: true
+                fail_if_ssl: false
+                fail_if_not_ssl: true
+                preferred_ip_protocol: "ip4"
             https_200_slow:
               prober: http
               timeout: 20s # setting to match the global prometheus scrape-timeout
