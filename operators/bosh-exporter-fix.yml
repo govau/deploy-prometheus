@@ -10,7 +10,7 @@
     properties:
       cron:
         variables:
-          PATH: /var/vcap/package/bosh_exporter/bin:/bin:/sbin:/usr/sbin:/usr/bin:/usr/local/bin
+          PATH: /var/vcap/packages/bosh_exporter/bin:/bin:/sbin:/usr/sbin:/usr/bin:/usr/local/bin
         entries:
         - command: /var/vcap/bosh/bin/monit restart bosh_exporter
           minute: '59'
