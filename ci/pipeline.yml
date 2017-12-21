@@ -13,7 +13,7 @@ resources:
 - name: deploy-prometheus.git
   type: git
   source:
-    branch: master
+    branch: child-envs # change to mater before merging PR
     uri: https://github.com/govau/deploy-prometheus.git
 - name: ops.git
   type: git
@@ -177,7 +177,7 @@ jobs:
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: ship-it-prod # root
   plan:
-  - aggregate: &aggregate-test-it
+  - aggregate:
     - get: stemcell
       passed:
       - test-it
@@ -191,8 +191,8 @@ jobs:
     - get: deploy-prometheus.git
       passed:
       - test-it
-  - task: get-dns-values
-    file: deploy-prometheus.git/ci/tasks/get-dns-values.yml
+  - task: generate-dns-values
+    file: deploy-prometheus.git/ci/tasks/generate-dns-values.yml
   - task: extract-release-src
     file: deploy-prometheus.git/ci/tasks/extract-release-src.yml
   - put: deployment
@@ -256,9 +256,29 @@ jobs:
 
 - name: ship-it-g-cld
   plan:
-  - aggregate: *aggregate-test-it
-  - task: get-dns-values
-    file: deploy-prometheus.git/ci/tasks/get-dns-values.yml
+  - aggregate:
+    - get: stemcell
+      trigger: true
+      passed:
+      - test-it
+    - get: prometheus-boshrelease.github-release
+      trigger: true
+      passed:
+      - test-it
+    - get: ops.git
+      trigger: true
+      passed:
+      - test-it
+    - get: prometheus-boshrelease.git
+      trigger: true
+      passed:
+      - test-it
+    - get: deploy-prometheus.git
+      trigger: true
+      passed:
+      - test-it
+  - task: generate-dns-values
+    file: deploy-prometheus.git/ci/tasks/generate-dns-values.yml
   - put: deployment
     params:
       manifest: prometheus-boshrelease.git/manifests/prometheus.yml
