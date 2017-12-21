@@ -177,7 +177,7 @@ jobs:
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: ship-it-prod
   plan:
-  - aggregate:
+  - aggregate: &aggregate-test-it
     - get: stemcell
       passed:
       - test-it
@@ -192,20 +192,7 @@ jobs:
       passed:
       - test-it
   - task: get-dns-values
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: govau/cga-cf-bosh-cli
-      inputs:
-      - name: deploy-prometheus.git
-      outputs:
-      - name: dns-details
-      run:
-        path: ./deploy-prometheus.git/ci/scripts/generate-dns-values.sh
-    params:
-      DNS_VAR_FILE: ./dns-details/dns-vars.yml
+    file: deploy-prometheus.git/ci/tasks/get-dns-values.yml
   - task: extract-release-src
     file: deploy-prometheus.git/ci/tasks/extract-release-src.yml
   - put: deployment

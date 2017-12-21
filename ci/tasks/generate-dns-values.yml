@@ -1,0 +1,14 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: govau/cga-cf-bosh-cli
+inputs:
+- name: deploy-prometheus.git
+outputs:
+- name: dns-details
+run:
+  path: ./deploy-prometheus.git/ci/scripts/generate-dns-values.sh
+params:
+  DNS_VAR_FILE: ./dns-details/dns-vars.yml
