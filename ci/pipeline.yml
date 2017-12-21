@@ -175,7 +175,7 @@ jobs:
       text: |
         :x: $ATC_EXTERNAL_URL - FAILED cleaning up dev BOSH director
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-- name: ship-it-prod
+- name: ship-it-prod # root
   plan:
   - aggregate: &aggregate-test-it
     - get: stemcell
@@ -241,15 +241,54 @@ jobs:
       vars_files:
       - dns-details/dns-vars.yml
       - ops.git/monitoring/probe_endpoints.yml
-  on_failure:
+  on_failure: &on_failure_slack
     put: slack
     params:
       text: |
         :x: $ATC_EXTERNAL_URL - FAILED deployment of prometheus
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-  on_success:
+  on_success: &on_success_slack
     put: slack
     params:
       text: |
         :white_check_mark: $ATC_EXTERNAL_URL - Successfully deployed prometheus
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+
+- name: ship-it-g-cld
+  plan:
+  - aggregate: *aggregate-test-it
+  - task: get-dns-values
+    file: deploy-prometheus.git/ci/tasks/get-dns-values.yml
+  - put: deployment
+    params:
+      manifest: prometheus-boshrelease.git/manifests/prometheus.yml
+      ops_files:
+      - prometheus-boshrelease.git/manifests/operators/monitor-bosh.yml
+      - prometheus-boshrelease.git/manifests/operators/alertmanager-web-external-url.yml
+      - prometheus-boshrelease.git/manifests/operators/prometheus-web-external-url.yml
+      - prometheus-boshrelease.git/manifests/operators/alertmanager-slack-receiver.yml
+      - deploy-prometheus.git/operators/deployment-name.yml
+      - deploy-prometheus.git/operators/dta-platform.yml
+      - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
+      - deploy-prometheus.git/operators/bosh-exporter-fix.yml
+      - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
+      releases:
+      - prometheus-boshrelease.github-release/*.tgz
+      stemcells:
+      - stemcell/*.tgz
+      vars:
+        alertmanager_slack_api_url: ((alertmanager_slack_api_url))
+        alertmanager_slack_channel: ((alertmanager_slack_channel))
+        alertmanager_web_external_url: ((alertmanager_web_external_url-g))
+        prometheus_web_external_url: ((prometheus_web_external_url-g))
+        bosh_ca_cert: ((bosh_ca_cert-g))
+        bosh_password: ((bosh_client_secret-g))
+        bosh_url: ((bosh_target-g))
+        bosh_username: ((bosh_client-g))
+        deployment-name: prometheus
+        metrics_environment: g-cld
+        skip_ssl_verify: false
+      vars_files:
+      - dns-details/dns-vars.yml
+  on_failure: *on_failure_slack
+  on_success: *on_success_slack
