@@ -15,9 +15,9 @@
         - command: /var/vcap/bosh/bin/monit restart bosh_exporter
           minute: '59'
           hour: '15'
-          day: ''
-          month: ''
-          wday: ''
+          day: '*'
+          month: '*'
+          wday: '*'
           user: root
 
 - type: replace
