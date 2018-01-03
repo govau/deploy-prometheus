@@ -20,8 +20,8 @@ The default deployment name `prometheus` is specified in the main deployment man
 #### [dta-platform](operators/dta-platform.yml)
 This operator file performs the main customisations for deploying prometheus to cloud.gov.au environments.
 
-#### [dta-platform-dev](operators/dta-platform-nginx-hosts.yml)
+#### [dta-platform-nginx-hosts](operators/dta-platform-nginx-hosts.yml)
 replace the single nginx host with 3 nginx hosts with instant-https support running in public subnets with EIPs.  the 3 new nginx hosts are for Grafana, Prometheus and Alert-Manager
 
-#### [dta-platform-dev](operators/dta-platform-cf-environments.yml)
+#### [dta-platform-cf-environments.yml](operators/dta-platform-cf-environments.yml)
 run cf-exports and firehose-exporters for the cloud.gov.au environments
