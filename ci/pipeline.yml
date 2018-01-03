@@ -10,11 +10,6 @@ resources:
     access_token: ((github-read-public-repos-token))
     owner: bosh-prometheus
     repository: prometheus-boshrelease
-- name: prometheus-boshrelease.git
-  type: git
-  source:
-    branch: master
-    uri: https://github.com/bosh-prometheus/prometheus-boshrelease.git
 - name: deploy-prometheus.git
   type: git
   source:
@@ -64,9 +59,9 @@ jobs:
   - aggregate:
     - get: prometheus-boshrelease.github-release
       trigger: true
+      params: { include_source_tarball: true }
     - get: ops.git
       trigger: true
-    - get: prometheus-boshrelease.git
     - get: deploy-prometheus.git
       trigger: true
   on_failure:
@@ -94,19 +89,19 @@ jobs:
       passed:
       - fetch
     - get: prometheus-boshrelease.github-release
-      passed:
-      - fetch
-    - get: prometheus-boshrelease.git
+      params: { include_source_tarball: true }
       passed:
       - fetch
     - get: deploy-prometheus.git
       passed:
       - fetch
+  - task: extract-release-src
+    file: deploy-prometheus.git/ci/tasks/extract-release-src.yml
   - put: deployment-dev
     params:
-      manifest: prometheus-boshrelease.git/manifests/prometheus.yml
+      manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
-      - prometheus-boshrelease.git/manifests/operators/monitor-bosh.yml
+      - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
@@ -187,12 +182,10 @@ jobs:
       passed:
       - test-it
     - get: prometheus-boshrelease.github-release
+      params: { include_source_tarball: true }
       passed:
       - test-it
     - get: ops.git
-      passed:
-      - test-it
-    - get: prometheus-boshrelease.git
       passed:
       - test-it
     - get: deploy-prometheus.git
@@ -213,14 +206,16 @@ jobs:
         path: ./deploy-prometheus.git/ci/scripts/generate-dns-values.sh
     params:
       DNS_VAR_FILE: ./dns-details/dns-vars.yml
+  - task: extract-release-src
+    file: deploy-prometheus.git/ci/tasks/extract-release-src.yml
   - put: deployment
     params:
-      manifest: prometheus-boshrelease.git/manifests/prometheus.yml
+      manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
-      - prometheus-boshrelease.git/manifests/operators/monitor-bosh.yml
-      - prometheus-boshrelease.git/manifests/operators/alertmanager-web-external-url.yml
-      - prometheus-boshrelease.git/manifests/operators/prometheus-web-external-url.yml
-      - prometheus-boshrelease.git/manifests/operators/alertmanager-slack-receiver.yml
+      - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
+      - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
+      - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
+      - prometheus-boshrelease.src/manifests/operators/alertmanager-slack-receiver.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
