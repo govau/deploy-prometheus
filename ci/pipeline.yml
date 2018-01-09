@@ -13,7 +13,7 @@ resources:
 - name: deploy-prometheus.git
   type: git
   source:
-    branch: child-envs # change to mater before merging PR
+    branch: child-envs
     uri: https://github.com/govau/deploy-prometheus.git
 - name: ops.git
   type: git
@@ -59,7 +59,8 @@ jobs:
   - aggregate:
     - get: prometheus-boshrelease.github-release
       trigger: true
-      params: { include_source_tarball: true }
+      params:
+        include_source_tarball: true
     - get: ops.git
       trigger: true
     - get: deploy-prometheus.git
@@ -89,9 +90,10 @@ jobs:
       passed:
       - fetch
     - get: prometheus-boshrelease.github-release
-      params: { include_source_tarball: true }
       passed:
       - fetch
+      params:
+        include_source_tarball: true
     - get: deploy-prometheus.git
       passed:
       - fetch
@@ -158,7 +160,6 @@ jobs:
         args:
         - -exc
         - bosh delete-deployment -n
-        dir: ""
       inputs:
       - name: deploy-prometheus.git
         path: ""
@@ -175,16 +176,17 @@ jobs:
       text: |
         :x: $ATC_EXTERNAL_URL - FAILED cleaning up dev BOSH director
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-- name: ship-it-prod # root
+- name: ship-it-prod
   plan:
   - aggregate:
     - get: stemcell
       passed:
       - test-it
     - get: prometheus-boshrelease.github-release
-      params: { include_source_tarball: true }
       passed:
       - test-it
+      params:
+        include_source_tarball: true
     - get: ops.git
       passed:
       - test-it
@@ -218,62 +220,62 @@ jobs:
         alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_slack_channel: ((alertmanager_slack_channel))
         alertmanager_web_external_url: ((alertmanager_web_external_url))
-        prometheus_web_external_url: ((prometheus_web_external_url))
+        b_cld_api_url: ((b_cld_api_url))
+        b_cld_doppler_url: ((b_cld_doppler_url))
+        b_cld_metrics_environment: ((b_cld_metrics_environment))
+        b_cld_uaa_url: ((b_cld_uaa_url))
         bosh_ca_cert: ((bosh_ca_cert))
         bosh_password: ((bosh_client_secret))
         bosh_url: ((bosh_target))
         bosh_username: ((bosh_client))
+        d_cld_api_url: ((d_cld_api_url))
+        d_cld_doppler_url: ((d_cld_doppler_url))
+        d_cld_metrics_environment: ((d_cld_metrics_environment))
+        d_cld_uaa_url: ((d_cld_uaa_url))
         deployment-name: prometheus
         metrics_environment: root-cld
+        prometheus_web_external_url: ((prometheus_web_external_url))
         skip_ssl_verify: false
-        d_cld_api_url: ((d_cld_api_url))
-        d_cld_metrics_environment: ((d_cld_metrics_environment))
-        d_cld_doppler_url: ((d_cld_doppler_url))
-        d_cld_uaa_url: ((d_cld_uaa_url))
         y_cld_api_url: ((y_cld_api_url))
-        y_cld_metrics_environment: ((y_cld_metrics_environment))
         y_cld_doppler_url: ((y_cld_doppler_url))
+        y_cld_metrics_environment: ((y_cld_metrics_environment))
         y_cld_uaa_url: ((y_cld_uaa_url))
-        b_cld_api_url: ((b_cld_api_url))
-        b_cld_metrics_environment: ((b_cld_metrics_environment))
-        b_cld_doppler_url: ((b_cld_doppler_url))
-        b_cld_uaa_url: ((b_cld_uaa_url))
       vars_files:
       - dns-details/dns-vars.yml
       - ops.git/monitoring/probe_endpoints.yml
-  on_failure: &on_failure_slack
+  on_failure:
     put: slack
     params:
       text: |
         :x: $ATC_EXTERNAL_URL - FAILED deployment of prometheus
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-  on_success: &on_success_slack
+  on_success:
     put: slack
     params:
       text: |
         :white_check_mark: $ATC_EXTERNAL_URL - Successfully deployed prometheus
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
-
 - name: ship-it-g-cld
   plan:
   - aggregate:
     - get: stemcell
-      trigger: true
       passed:
       - test-it
+      trigger: true
     - get: prometheus-boshrelease.github-release
-      params: { include_source_tarball: true }
-      trigger: true
       passed:
       - test-it
+      trigger: true
+      params:
+        include_source_tarball: true
     - get: ops.git
-      trigger: true
       passed:
       - test-it
+      trigger: true
     - get: deploy-prometheus.git
-      trigger: true
       passed:
       - test-it
+      trigger: true
   - task: generate-dns-values
     file: deploy-prometheus.git/ci/tasks/generate-dns-values.yml
   - put: deployment
@@ -297,15 +299,25 @@ jobs:
         alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_slack_channel: ((alertmanager_slack_channel))
         alertmanager_web_external_url: ((alertmanager_web_external_url-g))
-        prometheus_web_external_url: ((prometheus_web_external_url-g))
         bosh_ca_cert: ((bosh_ca_cert-g))
         bosh_password: ((bosh_client_secret-g))
         bosh_url: ((bosh_target-g))
         bosh_username: ((bosh_client-g))
         deployment-name: prometheus
         metrics_environment: g-cld
+        prometheus_web_external_url: ((prometheus_web_external_url-g))
         skip_ssl_verify: false
       vars_files:
       - dns-details/dns-vars.yml
-  on_failure: *on_failure_slack
-  on_success: *on_success_slack
+  on_failure:
+    put: slack
+    params:
+      text: |
+        :x: $ATC_EXTERNAL_URL - FAILED deployment of prometheus
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
+  on_success:
+    put: slack
+    params:
+      text: |
+        :white_check_mark: $ATC_EXTERNAL_URL - Successfully deployed prometheus
+        <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
