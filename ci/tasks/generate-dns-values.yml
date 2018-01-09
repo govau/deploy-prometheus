@@ -12,3 +12,5 @@ run:
   path: ./deploy-prometheus.git/ci/scripts/generate-dns-values.sh
 params:
   DNS_VAR_FILE: ./dns-details/dns-vars.yml
+  JUMPBOX:
+  JUMPBOX_SSH_KEY:
