@@ -262,14 +262,11 @@ jobs:
       passed:
       - test-it
     - get: prometheus-boshrelease.github-release
+      params: { include_source_tarball: true }
       trigger: true
       passed:
       - test-it
     - get: ops.git
-      trigger: true
-      passed:
-      - test-it
-    - get: prometheus-boshrelease.git
       trigger: true
       passed:
       - test-it
@@ -281,12 +278,12 @@ jobs:
     file: deploy-prometheus.git/ci/tasks/generate-dns-values.yml
   - put: deployment
     params:
-      manifest: prometheus-boshrelease.git/manifests/prometheus.yml
+      manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
-      - prometheus-boshrelease.git/manifests/operators/monitor-bosh.yml
-      - prometheus-boshrelease.git/manifests/operators/alertmanager-web-external-url.yml
-      - prometheus-boshrelease.git/manifests/operators/prometheus-web-external-url.yml
-      - prometheus-boshrelease.git/manifests/operators/alertmanager-slack-receiver.yml
+      - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
+      - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
+      - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
+      - prometheus-boshrelease.src/manifests/operators/alertmanager-slack-receiver.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
