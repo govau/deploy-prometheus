@@ -78,6 +78,7 @@ jobs:
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       text_file: prometheus-boshrelease.github-release/tag
 - name: test-it
+  serial_groups: [prometheus-dev]
   plan:
   - aggregate:
     - get: stemcell
@@ -134,6 +135,7 @@ jobs:
         :white_check_mark: $ATC_EXTERNAL_URL - Successfully tested prometheus boshrelease
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: test-it-cleanup
+  serial_groups: [prometheus-dev]
   plan:
   - aggregate:
     - get: slack
@@ -176,6 +178,7 @@ jobs:
         :x: $ATC_EXTERNAL_URL - FAILED cleaning up dev BOSH director
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: ship-it-prod
+  serial_groups: [prometheus]
   plan:
   - aggregate:
     - get: stemcell
