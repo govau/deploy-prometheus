@@ -20,7 +20,7 @@ resources:
   source:
     branch: master
     paths:
-    - monitoring/probe_endpoints.yml
+    - monitoring/*.yml
     private_key: ((ops-git-deploy-key))
     uri: git@github.com:AusDTO/ops.git
 - name: slack
@@ -218,7 +218,6 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
       - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
-      - prometheus-boshrelease.src/manifests/operators/alertmanager-slack-receiver.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
@@ -226,13 +225,20 @@ jobs:
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/bosh-exporter-fix.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
+      - ops.git/monitoring/alertmanager-receivers-and-routes.yml
+      - ops.git/monitoring/alerts-cloud-gov-au-platform.yml
+      - ops.git/monitoring/alerts-cloud-gov-au-services.yml
+      - ops.git/monitoring/alerts-marketplace.yml
+      - ops.git/monitoring/alerts-dashboard.yml
+      - ops.git/monitoring/alerts-guides.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
       stemcells:
       - stemcell/*.tgz
       vars:
         alertmanager_slack_api_url: ((alertmanager_slack_api_url))
-        alertmanager_slack_channel: ((alertmanager_slack_channel))
+        alertmanager_pagerduty_service_key_cloud: ((alertmanager_pagerduty_service_key_cloud))
+        alertmanager_pagerduty_service_key_marketplace: ((alertmanager_pagerduty_service_key_marketplace))
         alertmanager_web_external_url: ((alertmanager_web_external_url))
         prometheus_web_external_url: ((prometheus_web_external_url))
         bosh_ca_cert: ((bosh_ca_cert))
