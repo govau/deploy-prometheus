@@ -59,7 +59,8 @@ jobs:
   - aggregate:
     - get: prometheus-boshrelease.github-release
       trigger: true
-      params: { include_source_tarball: true }
+      params:
+        include_source_tarball: true
     - get: ops.git
       trigger: true
     - get: deploy-prometheus.git
@@ -78,7 +79,8 @@ jobs:
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
       text_file: prometheus-boshrelease.github-release/tag
 - name: test-it
-  serial_groups: [prometheus-dev]
+  serial_groups:
+  - prometheus-dev
   plan:
   - aggregate:
     - get: stemcell
@@ -90,9 +92,10 @@ jobs:
       passed:
       - fetch
     - get: prometheus-boshrelease.github-release
-      params: { include_source_tarball: true }
       passed:
       - fetch
+      params:
+        include_source_tarball: true
     - get: deploy-prometheus.git
       passed:
       - fetch
@@ -135,7 +138,8 @@ jobs:
         :white_check_mark: $ATC_EXTERNAL_URL - Successfully tested prometheus boshrelease
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: test-it-cleanup
-  serial_groups: [prometheus-dev]
+  serial_groups:
+  - prometheus-dev
   plan:
   - aggregate:
     - get: slack
@@ -160,7 +164,6 @@ jobs:
         args:
         - -exc
         - bosh delete-deployment -n
-        dir: ""
       inputs:
       - name: deploy-prometheus.git
         path: ""
@@ -178,16 +181,18 @@ jobs:
         :x: $ATC_EXTERNAL_URL - FAILED cleaning up dev BOSH director
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: ship-it-prod
-  serial_groups: [prometheus]
+  serial_groups:
+  - prometheus
   plan:
   - aggregate:
     - get: stemcell
       passed:
       - test-it
     - get: prometheus-boshrelease.github-release
-      params: { include_source_tarball: true }
       passed:
       - test-it
+      params:
+        include_source_tarball: true
     - get: ops.git
       passed:
       - test-it
@@ -201,12 +206,14 @@ jobs:
         type: docker-image
         source:
           repository: govau/cga-cf-bosh-cli
-      inputs:
-      - name: deploy-prometheus.git
-      outputs:
-      - name: dns-details
       run:
         path: ./deploy-prometheus.git/ci/scripts/generate-dns-values.sh
+      inputs:
+      - name: deploy-prometheus.git
+        path: ""
+      outputs:
+      - name: dns-details
+        path: ""
     params:
       DNS_VAR_FILE: ./dns-details/dns-vars.yml
   - task: extract-release-src
@@ -236,38 +243,36 @@ jobs:
       stemcells:
       - stemcell/*.tgz
       vars:
-        alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_pagerduty_service_key_cloud: ((alertmanager_pagerduty_service_key_cloud))
         alertmanager_pagerduty_service_key_marketplace: ((alertmanager_pagerduty_service_key_marketplace))
+        alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_web_external_url: ((alertmanager_web_external_url))
-        prometheus_web_external_url: ((prometheus_web_external_url))
+        b_cld_api_url: ((b_cld_api_url))
+        b_cld_doppler_url: ((b_cld_doppler_url))
+        b_cld_metrics_environment: ((b_cld_metrics_environment))
+        b_cld_uaa_url: ((b_cld_uaa_url))
         bosh_ca_cert: ((bosh_ca_cert))
         bosh_password: ((bosh_client_secret))
         bosh_url: ((bosh_target))
         bosh_username: ((bosh_client))
+        d_cld_api_url: ((d_cld_api_url))
+        d_cld_doppler_url: ((d_cld_doppler_url))
+        d_cld_metrics_environment: ((d_cld_metrics_environment))
+        d_cld_uaa_url: ((d_cld_uaa_url))
         deployment-name: prometheus
         metrics_environment: m-cld
+        prometheus_web_external_url: ((prometheus_web_external_url))
         skip_ssl_verify: false
-        d_cld_api_url: ((d_cld_api_url))
-        d_cld_metrics_environment: ((d_cld_metrics_environment))
-        d_cld_doppler_url: ((d_cld_doppler_url))
-        d_cld_uaa_url: ((d_cld_uaa_url))
-        y_cld_api_url: ((y_cld_api_url))
-        y_cld_metrics_environment: ((y_cld_metrics_environment))
-        y_cld_doppler_url: ((y_cld_doppler_url))
-        y_cld_uaa_url: ((y_cld_uaa_url))
-        b_cld_api_url: ((b_cld_api_url))
-        b_cld_metrics_environment: ((b_cld_metrics_environment))
-        b_cld_doppler_url: ((b_cld_doppler_url))
-        b_cld_uaa_url: ((b_cld_uaa_url))
-        uaa_clients_firehose_exporter_secret_b_cld: ((uaa_clients_firehose_exporter_secret_b_cld))
         uaa_clients_cf_exporter_secret_b_cld: ((uaa_clients_cf_exporter_secret_b_cld))
-
-        uaa_clients_firehose_exporter_secret_d_cld: ((uaa_clients_firehose_exporter_secret_d_cld))
         uaa_clients_cf_exporter_secret_d_cld: ((uaa_clients_cf_exporter_secret_d_cld))
-
-        uaa_clients_firehose_exporter_secret_y_cld: ((uaa_clients_firehose_exporter_secret_y_cld))
         uaa_clients_cf_exporter_secret_y_cld: ((uaa_clients_cf_exporter_secret_y_cld))
+        uaa_clients_firehose_exporter_secret_b_cld: ((uaa_clients_firehose_exporter_secret_b_cld))
+        uaa_clients_firehose_exporter_secret_d_cld: ((uaa_clients_firehose_exporter_secret_d_cld))
+        uaa_clients_firehose_exporter_secret_y_cld: ((uaa_clients_firehose_exporter_secret_y_cld))
+        y_cld_api_url: ((y_cld_api_url))
+        y_cld_doppler_url: ((y_cld_doppler_url))
+        y_cld_metrics_environment: ((y_cld_metrics_environment))
+        y_cld_uaa_url: ((y_cld_uaa_url))
       vars_files:
       - dns-details/dns-vars.yml
       - ops.git/monitoring/probe_endpoints.yml
