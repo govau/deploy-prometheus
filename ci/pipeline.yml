@@ -118,7 +118,7 @@ jobs:
         bosh_url: ((bosh_target))
         bosh_username: ((bosh_client))
         deployment-name: prometheus-dev
-        metrics_environment: root-cld-dev
+        metrics_environment: m-cld-dev
         skip_ssl_verify: false
       vars_files:
       - ops.git/monitoring/probe_endpoints.yml
@@ -246,7 +246,7 @@ jobs:
         bosh_url: ((bosh_target))
         bosh_username: ((bosh_client))
         deployment-name: prometheus
-        metrics_environment: root-cld
+        metrics_environment: m-cld
         skip_ssl_verify: false
         d_cld_api_url: ((d_cld_api_url))
         d_cld_metrics_environment: ((d_cld_metrics_environment))
@@ -260,6 +260,14 @@ jobs:
         b_cld_metrics_environment: ((b_cld_metrics_environment))
         b_cld_doppler_url: ((b_cld_doppler_url))
         b_cld_uaa_url: ((b_cld_uaa_url))
+        uaa_clients_firehose_exporter_secret_b_cld: ((uaa_clients_firehose_exporter_secret_b_cld))
+        uaa_clients_cf_exporter_secret_b_cld: ((uaa_clients_cf_exporter_secret_b_cld))
+
+        uaa_clients_firehose_exporter_secret_d_cld: ((uaa_clients_firehose_exporter_secret_d_cld))
+        uaa_clients_cf_exporter_secret_d_cld: ((uaa_clients_cf_exporter_secret_d_cld))
+
+        uaa_clients_firehose_exporter_secret_y_cld: ((uaa_clients_firehose_exporter_secret_y_cld))
+        uaa_clients_cf_exporter_secret_y_cld: ((uaa_clients_cf_exporter_secret_y_cld))
       vars_files:
       - dns-details/dns-vars.yml
       - ops.git/monitoring/probe_endpoints.yml
