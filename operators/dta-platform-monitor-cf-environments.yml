@@ -130,34 +130,3 @@
               client_secret: "((uaa_clients_firehose_exporter_secret_y_cld))"
             metrics:
               environment: ((y_cld_metrics_environment))
-
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_cf_exporter_secret_b_cld
-    type: password
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_cf_exporter_secret_d_cld
-    type: password
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_cf_exporter_secret_y_cld
-    type: password
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_firehose_exporter_secret_b_cld
-    type: password
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_firehose_exporter_secret_d_cld
-    type: password
-- type: replace
-  path: /variables/-
-  value:
-    name: uaa_clients_firehose_exporter_secret_y_cld
-    type: password
