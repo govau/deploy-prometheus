@@ -130,3 +130,12 @@
               client_secret: "((uaa_clients_firehose_exporter_secret_y_cld))"
             metrics:
               environment: ((y_cld_metrics_environment))
+
+# Monitor Certwatch app - TODO tidy this up
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  value:
+    job_name: certwatch
+    metrics_path: /metrics
+    static_configs:
+    - targets: [certmetrics.apps.y.cld.gov.au]
