@@ -218,6 +218,15 @@
   path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/rule_files/-
   value: /var/vcap/jobs/probe_alerts/*.alerts
 
+# Warning alerts when certificates expire in less than 30 days (default is 7)
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=probe_alerts/properties?/probe_alerts/cert_expiry_warning/threshold
+  value: 2592000
+# Critical alerts when certificates expire in less than 7 days (default is 24 hours)
+- type: replace
+  path: /instance_groups/name=prometheus/jobs/name=probe_alerts/properties?/probe_alerts/cert_expiry_critical/threshold
+  value: 604800
+
 # Grafana Dashboards
 - type: replace
   path: /instance_groups/name=grafana/jobs/name=probe_dashboards?/release
