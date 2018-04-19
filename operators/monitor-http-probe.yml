@@ -2,7 +2,7 @@
 
 # Exporter jobs
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/-
+  path: /instance_groups/name=prometheus2/jobs/-
   value:
     name: blackbox_exporter
     release: prometheus
@@ -66,7 +66,7 @@
                 preferred_ip_protocol: "ip4"
 # Prometheus Scrape Config
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: blackbox_http_200
     metrics_path: /probe
@@ -89,7 +89,7 @@
         target_label: __address__
         replacement: localhost:9115
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: blackbox_https_200
     metrics_path: /probe
@@ -113,7 +113,7 @@
         replacement: localhost:9115
 
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: blackbox_https_301
     metrics_path: /probe
@@ -137,7 +137,7 @@
         replacement: localhost:9115
 
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: blackbox_https_302
     metrics_path: /probe
@@ -161,7 +161,7 @@
         replacement: localhost:9115
 
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: blackbox_https_200_slow
     metrics_path: /probe
@@ -186,7 +186,7 @@
 
 # check availability of sites with access restrictions in place
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: blackbox_https_4xx
     metrics_path: /probe
@@ -211,20 +211,20 @@
 
 # Prometheus Alerts
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=probe_alerts?/release
+  path: /instance_groups/name=prometheus2/jobs/name=probe_alerts?/release
   value: prometheus
 
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=prometheus/properties/prometheus/rule_files/-
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/rule_files/-
   value: /var/vcap/jobs/probe_alerts/*.alerts
 
 # Warning alerts when certificates expire in less than 30 days (default is 7)
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=probe_alerts/properties?/probe_alerts/cert_expiry_warning/threshold
+  path: /instance_groups/name=prometheus2/jobs/name=probe_alerts/properties?/probe_alerts/cert_expiry_warning/threshold
   value: 2592000
 # Critical alerts when certificates expire in less than 7 days (default is 24 hours)
 - type: replace
-  path: /instance_groups/name=prometheus/jobs/name=probe_alerts/properties?/probe_alerts/cert_expiry_critical/threshold
+  path: /instance_groups/name=prometheus2/jobs/name=probe_alerts/properties?/probe_alerts/cert_expiry_critical/threshold
   value: 604800
 
 # Grafana Dashboards
