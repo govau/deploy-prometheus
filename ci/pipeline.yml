@@ -109,7 +109,6 @@ jobs:
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
-      - deploy-prometheus.git/operators/bosh-exporter-fix.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
@@ -231,7 +230,6 @@ jobs:
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-cf-environments.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
-      - deploy-prometheus.git/operators/bosh-exporter-fix.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
       - ops.git/monitoring/alerts-cloud-gov-au-platform.yml

@@ -7,7 +7,7 @@
   value: Support
 
 - type: replace
-  path: /instance_groups/name=prometheus/networks/name=default/name?
+  path: /instance_groups/name=prometheus2/networks/name=default/name?
   value: Support
 
 - type: replace
@@ -31,7 +31,7 @@
   path: /instance_groups/name=alertmanager/persistent_disk?
 
 - type: remove
-  path: /instance_groups/name=prometheus/persistent_disk?
+  path: /instance_groups/name=prometheus2/persistent_disk?
 
 - type: remove
   path: /instance_groups/name=database/persistent_disk?
@@ -44,7 +44,7 @@
   value: 10GB
 
 - type: replace
-  path: /instance_groups/name=prometheus/persistent_disk_type?
+  path: /instance_groups/name=prometheus2/persistent_disk_type?
   value: 30GB
 
 - type: replace
@@ -61,7 +61,7 @@
   value: monitoring
 
 - type: replace
-  path: /instance_groups/name=prometheus/vm_extensions?/-
+  path: /instance_groups/name=prometheus2/vm_extensions?/-
   value: monitoring
 
 - type: replace
@@ -82,7 +82,7 @@
   value: small
 
 - type: replace
-  path: /instance_groups/name=prometheus/vm_type?
+  path: /instance_groups/name=prometheus2/vm_type?
   value: c4.large
 
 - type: replace
