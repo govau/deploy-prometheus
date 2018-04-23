@@ -106,6 +106,7 @@ jobs:
       manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
       - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
+      - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
@@ -116,9 +117,9 @@ jobs:
       - stemcell/*.tgz
       vars:
         bosh_ca_cert: ((bosh_ca_cert))
-        bosh_password: ((bosh_client_secret))
+        bosh_client_secret: ((bosh_client_secret))
         bosh_url: ((bosh_target))
-        bosh_username: ((bosh_client))
+        bosh_client: ((bosh_client))
         deployment-name: prometheus-dev
         metrics_environment: m-cld-dev
         skip_ssl_verify: false
@@ -225,6 +226,7 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
+      - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
@@ -251,9 +253,9 @@ jobs:
         b_cld_metrics_environment: ((b_cld_metrics_environment))
         b_cld_uaa_url: ((b_cld_uaa_url))
         bosh_ca_cert: ((bosh_ca_cert))
-        bosh_password: ((bosh_client_secret))
+        bosh_client_secret: ((bosh_client_secret))
         bosh_url: ((bosh_target))
-        bosh_username: ((bosh_client))
+        bosh_client: ((bosh_client))
         d_cld_api_url: ((d_cld_api_url))
         d_cld_doppler_url: ((d_cld_doppler_url))
         d_cld_metrics_environment: ((d_cld_metrics_environment))
