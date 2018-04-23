@@ -1,0 +1,8 @@
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=bosh_exporter/properties/bosh_exporter/bosh
+  value:
+    url: "((bosh_url))"
+    uaa:
+      client_id: ((bosh_client))
+      client_secret: ((bosh_client_secret))
+    ca_cert: "((bosh_ca_cert))"
