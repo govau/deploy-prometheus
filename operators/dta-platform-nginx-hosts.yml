@@ -3,14 +3,14 @@
 # - prometheus
 # - alertmanager
 # - grafana
-# nginx instances have HTTPS termination support thanks to https://github.com/govau/instant-https-boshrelease
+# nginx instances have HTTPS termination support thanks to HAProxy in front
 - type: replace
   path: /releases/-
   value:
-    name: instant-https
-    url: https://github.com/govau/instant-https-boshrelease/releases/download/v0.4.0/instant-https-0.4.0.tgz
-    sha1: f603d51ce64efb0145a2842245404946782b1827
-    version: latest
+    name: haproxy
+    version: 8.7.0
+    url: https://github.com/cloudfoundry-incubator/haproxy-boshrelease/releases/download/v8.7.0/haproxy-8.7.0.tgz
+    sha1: 7898c1894c4b3254aa4a0ade0a02d33cf6c5c59a
 
 - type: replace
   path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
@@ -52,14 +52,15 @@
               auth_users:
                 - name: admin
                   password: ((prometheus_password))
-      - name: proxy
-        release: instant-https
+      - name: haproxy
+        release: haproxy
         properties:
-          hostname: ((prometheus_external_hostname))
-          contact_email: weboperations@digital.gov.au
-          acme_url: https://acme-v01.api.letsencrypt.org/directory
-          backends:
-            - localhost:9090
+          ha_proxy:
+            backend_port: 9090
+            backend_servers: ["127.0.0.1"]
+            disable_http: true
+            ssl_pem:
+            - ((prometheus_tls_cert))
 
 - type: replace
   path: /instance_groups/-
@@ -90,14 +91,15 @@
               auth_users:
                 - name: admin
                   password: ((prometheus_password))
-      - name: proxy
-        release: instant-https
+      - name: haproxy
+        release: haproxy
         properties:
-          hostname: ((alertmanager_external_hostname))
-          contact_email: weboperations@digital.gov.au
-          acme_url: https://acme-v01.api.letsencrypt.org/directory
-          backends:
-            - localhost:9093
+          ha_proxy:
+            backend_port: 9093
+            backend_servers: ["127.0.0.1"]
+            disable_http: true
+            ssl_pem:
+            - ((alertmanager_tls_cert))
 
 - type: replace
   path: /instance_groups/-
@@ -128,11 +130,12 @@
               auth_users:
                 - name: admin
                   password: ((prometheus_password))
-      - name: proxy
-        release: instant-https
+      - name: haproxy
+        release: haproxy
         properties:
-          hostname: ((grafana_external_hostname))
-          contact_email: weboperations@digital.gov.au
-          acme_url: https://acme-v01.api.letsencrypt.org/directory
-          backends:
-            - localhost:3000
+          ha_proxy:
+            backend_port: 3000
+            backend_servers: ["127.0.0.1"]
+            disable_http: true
+            ssl_pem:
+            - ((grafana_tls_cert))
