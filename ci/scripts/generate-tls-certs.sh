@@ -16,7 +16,6 @@ GRAFANA_EXTERNAL_HOSTNAME=$(dig +short public.grafana.monitoring.cld.internal pt
 GRAFANA_EXTERNAL_HOSTNAME=${GRAFANA_EXTERNAL_HOSTNAME:0:-1} # Drop trailing period
 GRAFANA_CERT="$(cat ./cert-grafana.s3/${GRAFANA_EXTERNAL_HOSTNAME}.crt)"
 
-prometheus_tls_cert
 cat > $TLS_CERTS_VAR_FILE <<END_OF_OPS
 ---
 alertmanager_tls_cert: '${ALERTMANAGER_CERT}'
