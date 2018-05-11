@@ -43,6 +43,33 @@ resources:
     client_secret: ((bosh_client_secret))
     deployment: prometheus
     target: ((bosh_target))
+- name: cert-alertmanager.s3
+  type: s3
+  source:
+    access_key_id: ((aws_access_key_id))
+    bucket: ((aws_certs_bucket))
+    region_name: ap-southeast-2
+    secret_access_key: ((aws_secret_access_key))
+    server_side_encryption: AES256
+    versioned_file: ((alertmanager_external_hostname)).crt
+- name: cert-grafana.s3
+  type: s3
+  source:
+    access_key_id: ((aws_access_key_id))
+    bucket: ((aws_certs_bucket))
+    region_name: ap-southeast-2
+    secret_access_key: ((aws_secret_access_key))
+    server_side_encryption: AES256
+    versioned_file: ((grafana_external_hostname)).crt
+- name: cert-prometheus.s3
+  type: s3
+  source:
+    access_key_id: ((aws_access_key_id))
+    bucket: ((aws_certs_bucket))
+    region_name: ap-southeast-2
+    secret_access_key: ((aws_secret_access_key))
+    server_side_encryption: AES256
+    versioned_file: ((prometheus_external_hostname)).crt
 resource_types:
 - name: slack-notification
   type: docker-image
@@ -181,8 +208,6 @@ jobs:
         :x: $ATC_EXTERNAL_URL - FAILED cleaning up dev BOSH director
         <$ATC_EXTERNAL_URL/teams/$BUILD_TEAM_NAME/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME|View build details>
 - name: ship-it-prod
-  serial_groups:
-  - prometheus
   plan:
   - aggregate:
     - get: stemcell
@@ -199,6 +224,35 @@ jobs:
     - get: deploy-prometheus.git
       passed:
       - test-it
+- name: deploy-to-prod
+  serial_groups:
+  - prometheus
+  plan:
+  - aggregate:
+    - get: stemcell
+      passed:
+      - ship-it-prod
+      trigger: true
+    - get: prometheus-boshrelease.github-release
+      passed:
+      - ship-it-prod
+      params:
+        include_source_tarball: true
+      trigger: true
+    - get: ops.git
+      passed:
+      - ship-it-prod
+      trigger: true
+    - get: deploy-prometheus.git
+      passed:
+      - ship-it-prod
+      trigger: true
+    - get: cert-alertmanager.s3
+      trigger: true
+    - get: cert-grafana.s3
+      trigger: true
+    - get: cert-prometheus.s3
+      trigger: true
   - task: get-dns-values
     config:
       platform: linux
@@ -216,6 +270,24 @@ jobs:
         path: ""
     params:
       DNS_VAR_FILE: ./dns-details/dns-vars.yml
+  - task: fetch-tls-certificates
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: govau/cga-cf-bosh-cli
+      run:
+        path: ./deploy-prometheus.git/ci/scripts/generate-tls-certs.sh
+      inputs:
+      - name: deploy-prometheus.git
+      - name: cert-alertmanager.s3
+      - name: cert-grafana.s3
+      - name: cert-prometheus.s3
+      outputs:
+      - name: tls-details
+    params:
+      TLS_CERTS_VAR_FILE: ./tls-details/tls-certs.yml
   - task: extract-release-src
     file: deploy-prometheus.git/ci/tasks/extract-release-src.yml
   - put: deployment
@@ -276,6 +348,7 @@ jobs:
         y_cld_uaa_url: ((y_cld_uaa_url))
       vars_files:
       - dns-details/dns-vars.yml
+      - tls-details/tls-certs.yml
       - ops.git/monitoring/probe_endpoints.yml
   on_failure:
     put: slack
