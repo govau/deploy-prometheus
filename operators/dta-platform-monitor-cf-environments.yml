@@ -145,8 +145,8 @@
   value:
     name: multi_bosh_exporter_boshrelease
     version: "2"
-    sha1: "938d6305595fa45fc5293ddf5e8d6cb1eaa4fec4"
-    url: "https://github.com/govau/multi_bosh_exporter_boshrelease/releases/download/2/multi_bosh_exporter_boshrelease-2.tgz"
+    sha1: "b4364c24a75d9b4d0984d4ae94b6b0d4b784b562"
+    url: "https://github.com/govau/multi_bosh_exporter_boshrelease/releases/download/v2/multi_bosh_exporter_boshrelease-2.tgz"
 
 
 # Exporter jobs
