@@ -132,8 +132,6 @@ jobs:
     params:
       manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
-      - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
-      - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
@@ -294,11 +292,9 @@ jobs:
     params:
       manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
-      - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
       - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
-      - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
