@@ -1,0 +1,149 @@
+
+# Exporter jobs
+- type: replace
+  path: /instance_groups/-
+  value:
+    name: staging_env
+    azs: [ z1, z2, z3 ]
+    instances: 1
+    vm_type: small
+    persistent_disk: 10_240
+    stemcell: default
+    vm_extensions: [monitoring]
+    provides:
+      prometheus: {as: prometheus_staging_env}
+    networks:
+      - name: Support
+    jobs:
+      - name: cloudfoundry_alerts
+        release: prometheus
+      - name: cf_exporter
+        release: prometheus
+        properties:
+          cf_exporter:
+            cf:
+              api_url: ((staging_env_api_url))
+              client_id: cf_exporter
+              client_secret: "((uaa_clients_cf_exporter_secret_staging_env))"
+              deployment_name: cf
+            metrics:
+              environment: ((staging_env_metrics_environment))
+      - name: firehose_exporter
+        release: prometheus
+        properties:
+          firehose_exporter:
+            doppler:
+              url: ((staging_env_doppler_url))
+              subscription_id: ((staging_env_metrics_environment))
+              max_retry_count: 300
+            uaa:
+              url: ((staging_env_uaa_url))
+              client_id: firehose_exporter
+              client_secret: "((uaa_clients_firehose_exporter_secret_staging_env))"
+            metrics:
+              environment: ((staging_env_metrics_environment))
+      - name: prometheus2
+        release: prometheus
+        properties:
+          prometheus:
+            rule_files:
+              - /var/vcap/jobs/postgres_alerts/*.alerts.yml
+              - /var/vcap/jobs/prometheus_alerts/*.alerts.yml
+            scrape_configs:
+              - job_name: prometheus
+                static_configs:
+                - targets:
+                  - localhost:9090
+              - job_name: bosh
+                scrape_interval: 2m
+                scrape_timeout: 1m
+                static_configs:
+                - targets:
+                  - localhost:9190
+      - name: postgres_alerts
+        release: prometheus
+      - name: prometheus_alerts
+        release: prometheus
+      - name: bosh_exporter
+        release: prometheus
+        properties:
+          bosh_exporter:
+            bosh:
+              url: "((staging_env_bosh_url))"
+              uaa:
+                client_id: ((staging_env_bosh_client))
+                client_secret: ((staging_env_bosh_client_secret))
+              ca_cert: "((staging_env_bosh_ca_cert))"
+            metrics:
+              environment: "((staging_env_metrics_environment))"
+
+- type: replace
+  path: /instance_groups/name=staging_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: cf
+    scrape_interval: 2m
+    scrape_timeout: 1m
+    static_configs:
+      - targets:
+        - localhost:9193
+- type: replace
+  path: /instance_groups/name=staging_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: firehose
+    scrape_interval: 2m
+    scrape_timeout: 1m
+    static_configs:
+      - targets:
+        - localhost:9186
+
+- type: replace
+  path: /instance_groups/name=staging_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: haproxy
+    file_sd_configs:
+      - files:
+        - "/var/vcap/store/bosh_exporter/bosh_target_groups.json"
+    relabel_configs:
+      - source_labels:
+        - __meta_bosh_job_process_name
+        regex: haproxy_exporter
+        action: keep
+      - source_labels:
+        - __address__
+        regex: "(.*)"
+        target_label: __address__
+        replacement: "${1}:9101"
+- type: replace
+  path: /instance_groups/name=staging_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: node
+    file_sd_configs:
+      - files:
+        - "/var/vcap/store/bosh_exporter/bosh_target_groups.json"
+    relabel_configs:
+      - source_labels:
+        - __meta_bosh_job_process_name
+        regex: node_exporter
+        action: keep
+      - source_labels:
+        - __address__
+        regex: "(.*)"
+        target_label: __address__
+        replacement: "${1}:9100"
+- type: replace
+  path: /instance_groups/name=staging_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: postgres
+    file_sd_configs:
+      - files:
+        - "/var/vcap/store/bosh_exporter/bosh_target_groups.json"
+    relabel_configs:
+      - source_labels:
+        - __meta_bosh_job_process_name
+        regex: postgres_exporter
+        action: keep
+      - source_labels:
+        - __address__
+        regex: "(.*)"
+        target_label: __address__
+        replacement: "${1}:9187"

@@ -17,11 +17,6 @@
   value:
     nginx: {from: nginx-grafana}
 
-# remove standard nginx host
-- type: remove
-  path: /instance_groups/name=nginx
-  value:
-
 # add 3 new nginx hosts
 - type: replace
   path: /instance_groups/-

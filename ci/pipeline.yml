@@ -136,6 +136,9 @@ jobs:
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
+      - deploy-prometheus.git/operators/dta-platform-remove-nginx-instance.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-environments.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-sandpit.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
@@ -144,11 +147,21 @@ jobs:
       - stemcell/*.tgz
       vars:
         bosh_ca_cert: ((bosh_ca_cert))
+        bosh_client: ((bosh_client))
         bosh_client_secret: ((bosh_client_secret))
         bosh_url: ((bosh_target))
-        bosh_client: ((bosh_client))
         deployment-name: prometheus-dev
         metrics_environment: m-cld-dev
+        sandpit_env_api_url: ((sandpit_env_api_url))
+        sandpit_env_bosh_ca_cert: ((sandpit_env_bosh_ca_cert))
+        sandpit_env_bosh_client: ((sandpit_env_bosh_client))
+        sandpit_env_bosh_client_secret: ((sandpit_env_bosh_client_secret))
+        sandpit_env_bosh_url: ((sandpit_env_bosh_url))
+        sandpit_env_doppler_url: ((sandpit_env_doppler_url))
+        sandpit_env_metrics_environment: ((sandpit_env_metrics_environment))
+        sandpit_env_uaa_clients_cf_exporter_secret: ((sandpit_env_uaa_clients_cf_exporter_secret))
+        sandpit_env_uaa_clients_firehose_exporter_secret: ((sandpit_env_uaa_clients_firehose_exporter_secret))
+        sandpit_env_uaa_url: ((sandpit_env_uaa_url))
         skip_ssl_verify: false
       vars_files:
       - ops.git/monitoring/probe_endpoints.yml
@@ -193,7 +206,6 @@ jobs:
         - bosh delete-deployment -n
       inputs:
       - name: deploy-prometheus.git
-        path: ""
     params:
       BOSH_CA_CERT: ((bosh_ca_cert))
       BOSH_CLIENT: ((bosh_client))
@@ -236,9 +248,9 @@ jobs:
     - get: prometheus-boshrelease.github-release
       passed:
       - ship-it-prod
+      trigger: true
       params:
         include_source_tarball: true
-      trigger: true
     - get: ops.git
       passed:
       - ship-it-prod
@@ -301,8 +313,12 @@ jobs:
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/dta-platform.yml
-      - deploy-prometheus.git/operators/dta-platform-nginx-hosts.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-cf-environments.yml
+      - deploy-prometheus.git/operators/dta-platform-remove-nginx-instance.yml
+      - deploy-prometheus.git/operators/dta-platform-add-public-webhosts.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-environments.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-sandpit.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-staging.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-prod.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
@@ -320,44 +336,44 @@ jobs:
         alertmanager_pagerduty_service_key_marketplace: ((alertmanager_pagerduty_service_key_marketplace))
         alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_web_external_url: ((alertmanager_web_external_url))
-        b_cld_bosh_url: ((b_cld_bosh_url))
-        b_cld_bosh_client: ((b_cld_bosh_client))
-        b_cld_bosh_client_secret: ((b_cld_bosh_client_secret))
-        b_cld_bosh_ca_cert: ((b_cld_bosh_ca_cert))
-        b_cld_api_url: ((b_cld_api_url))
-        b_cld_doppler_url: ((b_cld_doppler_url))
-        b_cld_metrics_environment: ((b_cld_metrics_environment))
-        b_cld_uaa_url: ((b_cld_uaa_url))
         bosh_ca_cert: ((bosh_ca_cert))
+        bosh_client: ((bosh_client))
         bosh_client_secret: ((bosh_client_secret))
         bosh_url: ((bosh_target))
-        bosh_client: ((bosh_client))
-        d_cld_bosh_url: ((d_cld_bosh_url))
-        d_cld_bosh_client: ((d_cld_bosh_client))
-        d_cld_bosh_client_secret: ((d_cld_bosh_client_secret))
-        d_cld_bosh_ca_cert: ((d_cld_bosh_ca_cert))
-        d_cld_api_url: ((d_cld_api_url))
-        d_cld_doppler_url: ((d_cld_doppler_url))
-        d_cld_metrics_environment: ((d_cld_metrics_environment))
-        d_cld_uaa_url: ((d_cld_uaa_url))
         deployment-name: prometheus
         metrics_environment: m-cld
+        prod_env_api_url: ((prod_env_api_url))
+        prod_env_bosh_ca_cert: ((prod_env_bosh_ca_cert))
+        prod_env_bosh_client: ((prod_env_bosh_client))
+        prod_env_bosh_client_secret: ((prod_env_bosh_client_secret))
+        prod_env_bosh_url: ((prod_env_bosh_url))
+        prod_env_doppler_url: ((prod_env_doppler_url))
+        prod_env_metrics_environment: ((prod_env_metrics_environment))
+        prod_env_uaa_clients_cf_exporter_secret: ((prod_env_uaa_clients_cf_exporter_secret))
+        prod_env_uaa_clients_firehose_exporter_secret: ((prod_env_uaa_clients_firehose_exporter_secret))
+        prod_env_uaa_url: ((prod_env_uaa_url))
         prometheus_web_external_url: ((prometheus_web_external_url))
+        sandpit_env_api_url: ((sandpit_env_api_url))
+        sandpit_env_bosh_ca_cert: ((sandpit_env_bosh_ca_cert))
+        sandpit_env_bosh_client: ((sandpit_env_bosh_client))
+        sandpit_env_bosh_client_secret: ((sandpit_env_bosh_client_secret))
+        sandpit_env_bosh_url: ((sandpit_env_bosh_url))
+        sandpit_env_doppler_url: ((sandpit_env_doppler_url))
+        sandpit_env_metrics_environment: ((sandpit_env_metrics_environment))
+        sandpit_env_uaa_clients_cf_exporter_secret: ((sandpit_env_uaa_clients_cf_exporter_secret))
+        sandpit_env_uaa_clients_firehose_exporter_secret: ((sandpit_env_uaa_clients_firehose_exporter_secret))
+        sandpit_env_uaa_url: ((sandpit_env_uaa_url))
         skip_ssl_verify: false
-        uaa_clients_cf_exporter_secret_b_cld: ((uaa_clients_cf_exporter_secret_b_cld))
-        uaa_clients_cf_exporter_secret_d_cld: ((uaa_clients_cf_exporter_secret_d_cld))
-        uaa_clients_cf_exporter_secret_y_cld: ((uaa_clients_cf_exporter_secret_y_cld))
-        uaa_clients_firehose_exporter_secret_b_cld: ((uaa_clients_firehose_exporter_secret_b_cld))
-        uaa_clients_firehose_exporter_secret_d_cld: ((uaa_clients_firehose_exporter_secret_d_cld))
-        uaa_clients_firehose_exporter_secret_y_cld: ((uaa_clients_firehose_exporter_secret_y_cld))
-        y_cld_bosh_url: ((y_cld_bosh_url))
-        y_cld_bosh_client: ((y_cld_bosh_client))
-        y_cld_bosh_client_secret: ((y_cld_bosh_client_secret))
-        y_cld_bosh_ca_cert: ((y_cld_bosh_ca_cert))
-        y_cld_api_url: ((y_cld_api_url))
-        y_cld_doppler_url: ((y_cld_doppler_url))
-        y_cld_metrics_environment: ((y_cld_metrics_environment))
-        y_cld_uaa_url: ((y_cld_uaa_url))
+        staging_env_api_url: ((staging_env_api_url))
+        staging_env_bosh_ca_cert: ((staging_env_bosh_ca_cert))
+        staging_env_bosh_client: ((staging_env_bosh_client))
+        staging_env_bosh_client_secret: ((staging_env_bosh_client_secret))
+        staging_env_bosh_url: ((staging_env_bosh_url))
+        staging_env_doppler_url: ((staging_env_doppler_url))
+        staging_env_metrics_environment: ((staging_env_metrics_environment))
+        staging_env_uaa_clients_cf_exporter_secret: ((staging_env_uaa_clients_cf_exporter_secret))
+        staging_env_uaa_clients_firehose_exporter_secret: ((staging_env_uaa_clients_firehose_exporter_secret))
+        staging_env_uaa_url: ((staging_env_uaa_url))
       vars_files:
       - dns-details/dns-vars.yml
       - tls-details/tls-certs.yml

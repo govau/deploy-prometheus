@@ -1,0 +1,5 @@
+---
+# remove standard nginx host
+- type: remove
+  path: /instance_groups/name=nginx
+  value:
