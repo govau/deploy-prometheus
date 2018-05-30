@@ -22,6 +22,18 @@
   path: /instance_groups/name=nginx/networks/name=default/name?
   value: Support
 
+- type: replace
+  path: /instance_groups/name=sandpit_env/networks/name=default/name?
+  value: Support
+
+- type: replace
+  path: /instance_groups/name=staging_env/networks/name=default/name?
+  value: Support
+
+- type: replace
+  path: /instance_groups/name=prod_env/networks/name=default/name?
+  value: Support
+
 # Update storage volume sizes for persistent services
 
 # prometheus-boshrelease sets volume size using persistent_disk, so we remove
@@ -39,6 +51,15 @@
 - type: remove
   path: /instance_groups/name=grafana/persistent_disk?
 
+- type: remove
+  path: /instance_groups/name=sandpit_env/persistent_disk?
+
+- type: remove
+  path: /instance_groups/name=staging_env/persistent_disk?
+
+- type: remove
+  path: /instance_groups/name=prod_env/persistent_disk?
+
 - type: replace
   path: /instance_groups/name=alertmanager/persistent_disk_type?
   value: 10GB
@@ -53,6 +74,18 @@
 
 - type: replace
   path: /instance_groups/name=grafana/persistent_disk_type?
+  value: 10GB
+
+- type: replace
+  path: /instance_groups/name=sandpit_env/persistent_disk_type?
+  value: 10GB
+
+- type: replace
+  path: /instance_groups/name=staging_env/persistent_disk_type?
+  value: 10GB
+
+- type: replace
+  path: /instance_groups/name=prod_env/persistent_disk_type?
   value: 10GB
 
 # add monitoring vm_extension to instances (for security groups)
@@ -76,6 +109,18 @@
   path: /instance_groups/name=nginx/vm_extensions?/-
   value: monitoring
 
+- type: replace
+  path: /instance_groups/name=sandpit_env/vm_extensions?/-
+  value: monitoring
+
+- type: replace
+  path: /instance_groups/name=staging_env/vm_extensions?/-
+  value: monitoring
+
+- type: replace
+  path: /instance_groups/name=prod_env/vm_extensions?/-
+  value: monitoring
+
 # deploy small instances
 - type: replace
   path: /instance_groups/name=alertmanager/vm_type?
@@ -95,4 +140,16 @@
 
 - type: replace
   path: /instance_groups/name=nginx/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=sandpit_env/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=staging_env/vm_type?
+  value: small
+
+- type: replace
+  path: /instance_groups/name=prod_env/vm_type?
   value: small

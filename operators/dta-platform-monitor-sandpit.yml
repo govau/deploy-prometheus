@@ -1,17 +1,17 @@
-
-# Exporter jobs
+# Prometheus server and exporter jobs for SANDPIT environment (d.cld.gov.au)
 - type: replace
   path: /instance_groups/-
   value:
     name: sandpit_env
     azs: [ z1, z2, z3 ]
     instances: 1
-    vm_type: small
+    vm_type: default
     persistent_disk: 10_240
     stemcell: default
-    vm_extensions: [monitoring]
+    provides:
+      prometheus: {as: prometheus_sandpit_env}
     networks:
-      - name: Support
+      - name: default
     jobs:
       - name: cf_exporter
         release: prometheus
@@ -30,7 +30,7 @@
           firehose_exporter:
             doppler:
               url: ((sandpit_env_doppler_url))
-              subscription_id: ((sandpit_env_metrics_environment))
+              subscription_id: "((sandpit_env_metrics_environment))-((deployment-name))"
               max_retry_count: 300
             uaa:
               url: ((sandpit_env_uaa_url))
@@ -56,6 +56,8 @@
           prometheus: {as: prometheus_sandpit_env}
         properties:
           prometheus:
+            external_labels:
+              cloud_env: sandpit
             rule_files:
               - /var/vcap/jobs/bosh_alerts/*.alerts.yml
               - /var/vcap/jobs/cloudfoundry_alerts/*.alerts.yml
@@ -80,26 +82,6 @@
         release: prometheus
       - name: prometheus_alerts
         release: prometheus
-
-
-- type: replace
-  path: /instance_groups/name=sandpit_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
-  value:
-    job_name: cf
-    scrape_interval: 2m
-    scrape_timeout: 1m
-    static_configs:
-      - targets:
-        - localhost:9193
-- type: replace
-  path: /instance_groups/name=sandpit_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
-  value:
-    job_name: firehose
-    scrape_interval: 2m
-    scrape_timeout: 1m
-    static_configs:
-      - targets:
-        - localhost:9186
 
 - type: replace
   path: /instance_groups/name=sandpit_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-

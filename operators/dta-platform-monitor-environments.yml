@@ -28,20 +28,12 @@
     prometheus: {as: prometheus_monitoring_env}
 
 - type: replace
-  path: /instance_groups/name=prometheus2/properties?
+  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
   value:
-    aliases:
-      sandpit.prometheus:
-        # - "*.sandpit-env.*.((deployment-name)).bosh"
-        - "*.sandpit-env.*"
-      staging.prometheus:
-        - "*.staging-env.*"
-      prod.prometheus:
-        - "*.prod-env.*"
-
+    prometheus: {from: prometheus_monitoring_env}
 
 - type: replace
-  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  path: /instance_groups/name=nginx/jobs/name=nginx/consumes?
   value:
     prometheus: {from: prometheus_monitoring_env}
 
@@ -53,3 +45,21 @@
     metrics_path: /metrics
     static_configs:
     - targets: [certmetrics.apps.y.cld.gov.au]
+
+# Monitor federated prometheus servers
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: dta_federation
+    scrape_interval: 15s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      match[]:
+        - '{job="prometheus"}'
+        - '{job=~"bosh"}'
+    static_configs:
+    - targets:
+      - sandpit.prometheus:9090
+      - staging.prometheus:9090
+      - prod.prometheus:9090
