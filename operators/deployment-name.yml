@@ -1,4 +1,6 @@
 ---
+# allows easy method to change BOSH deployment name.
+# useful when deploying this release multiple times on a single BOSH director
 - type: replace
   path: /name
   value: ((deployment-name))

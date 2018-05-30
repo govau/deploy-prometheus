@@ -47,6 +47,7 @@
     - targets: [certmetrics.apps.y.cld.gov.au]
 
 # Monitor federated prometheus servers
+# target URLs below rely on BOSH dns
 - type: replace
   path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:

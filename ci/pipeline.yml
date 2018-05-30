@@ -133,12 +133,15 @@ jobs:
       manifest: prometheus-boshrelease.src/manifests/prometheus.yml
       ops_files:
       - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
+      - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
-      - deploy-prometheus.git/operators/dta-platform.yml
-      - deploy-prometheus.git/operators/dta-platform-remove-nginx-instance.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-bosh-dns-addon.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-environments.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-sandpit.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-staging.yml
+      - deploy-prometheus.git/operators/dta-platform-monitor-prod.yml
+      - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
@@ -152,6 +155,16 @@ jobs:
         bosh_url: ((bosh_target))
         deployment-name: prometheus-dev
         metrics_environment: m-cld-dev
+        prod_env_api_url: ((prod_env_api_url))
+        prod_env_bosh_ca_cert: ((prod_env_bosh_ca_cert))
+        prod_env_bosh_client: ((prod_env_bosh_client))
+        prod_env_bosh_client_secret: ((prod_env_bosh_client_secret))
+        prod_env_bosh_url: ((prod_env_bosh_url))
+        prod_env_doppler_url: ((prod_env_doppler_url))
+        prod_env_metrics_environment: ((prod_env_metrics_environment))
+        prod_env_uaa_clients_cf_exporter_secret: ((prod_env_uaa_clients_cf_exporter_secret))
+        prod_env_uaa_clients_firehose_exporter_secret: ((prod_env_uaa_clients_firehose_exporter_secret))
+        prod_env_uaa_url: ((prod_env_uaa_url))
         sandpit_env_api_url: ((sandpit_env_api_url))
         sandpit_env_bosh_ca_cert: ((sandpit_env_bosh_ca_cert))
         sandpit_env_bosh_client: ((sandpit_env_bosh_client))
@@ -163,6 +176,16 @@ jobs:
         sandpit_env_uaa_clients_firehose_exporter_secret: ((sandpit_env_uaa_clients_firehose_exporter_secret))
         sandpit_env_uaa_url: ((sandpit_env_uaa_url))
         skip_ssl_verify: false
+        staging_env_api_url: ((staging_env_api_url))
+        staging_env_bosh_ca_cert: ((staging_env_bosh_ca_cert))
+        staging_env_bosh_client: ((staging_env_bosh_client))
+        staging_env_bosh_client_secret: ((staging_env_bosh_client_secret))
+        staging_env_bosh_url: ((staging_env_bosh_url))
+        staging_env_doppler_url: ((staging_env_doppler_url))
+        staging_env_metrics_environment: ((staging_env_metrics_environment))
+        staging_env_uaa_clients_cf_exporter_secret: ((staging_env_uaa_clients_cf_exporter_secret))
+        staging_env_uaa_clients_firehose_exporter_secret: ((staging_env_uaa_clients_firehose_exporter_secret))
+        staging_env_uaa_url: ((staging_env_uaa_url))
       vars_files:
       - ops.git/monitoring/probe_endpoints.yml
   on_failure:
@@ -276,10 +299,8 @@ jobs:
         path: ./deploy-prometheus.git/ci/scripts/generate-dns-values.sh
       inputs:
       - name: deploy-prometheus.git
-        path: ""
       outputs:
       - name: dns-details
-        path: ""
     params:
       DNS_VAR_FILE: ./dns-details/dns-vars.yml
   - task: fetch-tls-certificates
@@ -312,13 +333,13 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
-      - deploy-prometheus.git/operators/dta-platform.yml
       - deploy-prometheus.git/operators/dta-platform-remove-nginx-instance.yml
       - deploy-prometheus.git/operators/dta-platform-add-public-webhosts.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-environments.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-sandpit.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-staging.yml
       - deploy-prometheus.git/operators/dta-platform-monitor-prod.yml
+      - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
