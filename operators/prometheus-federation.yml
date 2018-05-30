@@ -1,0 +1,34 @@
+# Monitor federated prometheus servers
+# target URLs below rely on BOSH dns
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: dta_federation
+    scrape_interval: 15s
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      match[]:
+        - '{job="prometheus"}'
+        - '{job=~"bosh"}'
+    static_configs:
+    - targets:
+      - sandpit.prometheus:9090
+      - staging.prometheus:9090
+      - prod.prometheus:9090
+
+# sort out linking now that there are >1 prometheus2 instances
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/provides?
+  value:
+    prometheus: {as: prometheus_monitoring_env}
+
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  value:
+    prometheus: {from: prometheus_monitoring_env}
+
+- type: replace
+  path: /instance_groups/name=nginx/jobs/name=nginx/consumes?
+  value:
+    prometheus: {from: prometheus_monitoring_env}

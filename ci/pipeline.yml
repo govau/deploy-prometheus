@@ -136,13 +136,15 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-bosh-dns-addon.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-environments.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-sandpit.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-staging.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-prod.yml
-      - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
+      - deploy-prometheus.git/operators/bosh-dns-addon.yml
+      - deploy-prometheus.git/operators/monitor-certwatch.yml
+      - deploy-prometheus.git/operators/monitor-cloudfoundry.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
+      - deploy-prometheus.git/operators/prometheus-federation.yml
+      - deploy-prometheus.git/operators/prometheus-sandpit.yml
+      - deploy-prometheus.git/operators/prometheus-staging.yml
+      - deploy-prometheus.git/operators/prometheus-prod.yml
+      - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
       - prometheus-boshrelease.github-release/*.tgz
@@ -333,14 +335,17 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
-      - deploy-prometheus.git/operators/dta-platform-remove-nginx-instance.yml
+      - deploy-prometheus.git/operators/bosh-dns-addon.yml
+      - deploy-prometheus.git/operators/remove-nginx-instance.yml
       - deploy-prometheus.git/operators/dta-platform-add-public-webhosts.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-environments.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-sandpit.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-staging.yml
-      - deploy-prometheus.git/operators/dta-platform-monitor-prod.yml
-      - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
+      - deploy-prometheus.git/operators/monitor-certwatch.yml
+      - deploy-prometheus.git/operators/monitor-cloudfoundry.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
+      - deploy-prometheus.git/operators/prometheus-federation.yml
+      - deploy-prometheus.git/operators/prometheus-sandpit.yml
+      - deploy-prometheus.git/operators/prometheus-staging.yml
+      - deploy-prometheus.git/operators/prometheus-prod.yml
+      - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
       - ops.git/monitoring/alerts-cloud-gov-au-platform.yml
