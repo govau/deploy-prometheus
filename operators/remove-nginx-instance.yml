@@ -1,0 +1,6 @@
+---
+# remove standard nginx host
+# used on prod deployment where we have 3 replacement webservers
+- type: remove
+  path: /instance_groups/name=nginx
+  value:

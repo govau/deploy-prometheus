@@ -1,5 +1,5 @@
 ---
-# replace single nginx instance with 3 instances in a public subnet
+# Add 3 Webserver instances in a public subnet
 # - prometheus
 # - alertmanager
 # - grafana
