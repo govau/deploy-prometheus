@@ -2,14 +2,14 @@
 - type: replace
   path: /instance_groups/-
   value:
-    name: sandpit_env
+    name: d-cld
     azs: [ z1, z2, z3 ]
     instances: 1
     vm_type: default
     persistent_disk: 10_240
     stemcell: default
     provides:
-      prometheus: {as: prometheus_sandpit_env}
+      prometheus: {as: prometheus_d_cld}
     networks:
       - name: default
     jobs:
@@ -18,42 +18,42 @@
         properties:
           cf_exporter:
             cf:
-              api_url: ((sandpit_env_api_url))
+              api_url: ((d_cld_api_url))
               client_id: cf_exporter
-              client_secret: "((sandpit_env_uaa_clients_cf_exporter_secret))"
+              client_secret: "((d_cld_uaa_clients_cf_exporter_secret))"
               deployment_name: cf
             metrics:
-              environment: ((sandpit_env_metrics_environment))
+              environment: ((d_cld_metrics_environment))
       - name: firehose_exporter
         release: prometheus
         properties:
           firehose_exporter:
             doppler:
-              url: ((sandpit_env_doppler_url))
-              subscription_id: "((sandpit_env_metrics_environment))-((deployment-name))"
+              url: ((d_cld_doppler_url))
+              subscription_id: "((d_cld_metrics_environment))-((deployment-name))"
               max_retry_count: 300
             uaa:
-              url: ((sandpit_env_uaa_url))
+              url: ((d_cld_uaa_url))
               client_id: firehose_exporter
-              client_secret: "((sandpit_env_uaa_clients_firehose_exporter_secret))"
+              client_secret: "((d_cld_uaa_clients_firehose_exporter_secret))"
             metrics:
-              environment: ((sandpit_env_metrics_environment))
+              environment: ((d_cld_metrics_environment))
       - name: bosh_exporter
         release: prometheus
         properties:
           bosh_exporter:
             bosh:
-              url: "((sandpit_env_bosh_url))"
+              url: "((d_cld_bosh_url))"
               uaa:
-                client_id: ((sandpit_env_bosh_client))
-                client_secret: ((sandpit_env_bosh_client_secret))
-              ca_cert: "((sandpit_env_bosh_ca_cert))"
+                client_id: ((d_cld_bosh_client))
+                client_secret: ((d_cld_bosh_client_secret))
+              ca_cert: "((d_cld_bosh_ca_cert))"
             metrics:
-              environment: "((sandpit_env_metrics_environment))"
+              environment: "((d_cld_metrics_environment))"
       - name: prometheus2
         release: prometheus
         provides:
-          prometheus: {as: prometheus_sandpit_env}
+          prometheus: {as: prometheus_d_cld}
         properties:
           prometheus:
             external_labels:
@@ -84,7 +84,7 @@
         release: prometheus
 
 - type: replace
-  path: /instance_groups/name=sandpit_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=d-cld/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: haproxy
     file_sd_configs:
@@ -101,7 +101,7 @@
         target_label: __address__
         replacement: "${1}:9101"
 - type: replace
-  path: /instance_groups/name=sandpit_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=d-cld/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: node
     file_sd_configs:
@@ -118,7 +118,7 @@
         target_label: __address__
         replacement: "${1}:9100"
 - type: replace
-  path: /instance_groups/name=sandpit_env/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  path: /instance_groups/name=d-cld/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
     job_name: postgres
     file_sd_configs:

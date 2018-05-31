@@ -24,12 +24,12 @@
             - "127.0.0.1"
           prometheus.prometheus:
             - "*.prometheus2.*.((deployment-name)).bosh"
-          sandpit.prometheus:
-            - "*.sandpit-env.*.((deployment-name)).bosh"
-          staging.prometheus:
-            - "*.staging-env.*.((deployment-name)).bosh"
-          prod.prometheus:
-            - "*.prod-env.*.((deployment-name)).bosh"
+          d-cld.prometheus:
+            - "*.d-cld.*.((deployment-name)).bosh"
+          y-cld.prometheus:
+            - "*.y-cld.*.((deployment-name)).bosh"
+          b-cld.prometheus:
+            - "*.b-cld.*.((deployment-name)).bosh"
         cache:
           enabled: true
         health:

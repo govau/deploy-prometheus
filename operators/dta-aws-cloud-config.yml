@@ -23,15 +23,15 @@
   value: Support
 
 - type: replace
-  path: /instance_groups/name=sandpit_env/networks/name=default/name?
+  path: /instance_groups/name=d-cld/networks/name=default/name?
   value: Support
 
 - type: replace
-  path: /instance_groups/name=staging_env/networks/name=default/name?
+  path: /instance_groups/name=y-cld/networks/name=default/name?
   value: Support
 
 - type: replace
-  path: /instance_groups/name=prod_env/networks/name=default/name?
+  path: /instance_groups/name=b-cld/networks/name=default/name?
   value: Support
 
 # Update storage volume sizes for persistent services
@@ -52,13 +52,13 @@
   path: /instance_groups/name=grafana/persistent_disk?
 
 - type: remove
-  path: /instance_groups/name=sandpit_env/persistent_disk?
+  path: /instance_groups/name=d-cld/persistent_disk?
 
 - type: remove
-  path: /instance_groups/name=staging_env/persistent_disk?
+  path: /instance_groups/name=y-cld/persistent_disk?
 
 - type: remove
-  path: /instance_groups/name=prod_env/persistent_disk?
+  path: /instance_groups/name=b-cld/persistent_disk?
 
 - type: replace
   path: /instance_groups/name=alertmanager/persistent_disk_type?
@@ -77,15 +77,15 @@
   value: 10GB
 
 - type: replace
-  path: /instance_groups/name=sandpit_env/persistent_disk_type?
+  path: /instance_groups/name=d-cld/persistent_disk_type?
   value: 10GB
 
 - type: replace
-  path: /instance_groups/name=staging_env/persistent_disk_type?
+  path: /instance_groups/name=y-cld/persistent_disk_type?
   value: 10GB
 
 - type: replace
-  path: /instance_groups/name=prod_env/persistent_disk_type?
+  path: /instance_groups/name=b-cld/persistent_disk_type?
   value: 10GB
 
 # add monitoring vm_extension to instances (for security groups)
@@ -110,15 +110,15 @@
   value: monitoring
 
 - type: replace
-  path: /instance_groups/name=sandpit_env/vm_extensions?/-
+  path: /instance_groups/name=d-cld/vm_extensions?/-
   value: monitoring
 
 - type: replace
-  path: /instance_groups/name=staging_env/vm_extensions?/-
+  path: /instance_groups/name=y-cld/vm_extensions?/-
   value: monitoring
 
 - type: replace
-  path: /instance_groups/name=prod_env/vm_extensions?/-
+  path: /instance_groups/name=b-cld/vm_extensions?/-
   value: monitoring
 
 # deploy small instances
@@ -143,13 +143,13 @@
   value: small
 
 - type: replace
-  path: /instance_groups/name=sandpit_env/vm_type?
+  path: /instance_groups/name=d-cld/vm_type?
   value: small
 
 - type: replace
-  path: /instance_groups/name=staging_env/vm_type?
+  path: /instance_groups/name=y-cld/vm_type?
   value: small
 
 - type: replace
-  path: /instance_groups/name=prod_env/vm_type?
+  path: /instance_groups/name=b-cld/vm_type?
   value: small

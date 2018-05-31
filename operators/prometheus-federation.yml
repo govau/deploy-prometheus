@@ -13,9 +13,9 @@
         - '{job=~"bosh"}'
     static_configs:
     - targets:
-      - sandpit.prometheus:9090
-      - staging.prometheus:9090
-      - prod.prometheus:9090
+      - d-cld.prometheus:9090
+      - y-cld.prometheus:9090
+      - b-cld.prometheus:9090
 
 # sort out linking now that there are >1 prometheus2 instances
 - type: replace
