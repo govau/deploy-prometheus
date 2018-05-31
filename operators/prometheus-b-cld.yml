@@ -57,7 +57,7 @@
         properties:
           prometheus:
             external_labels:
-              cloud_env: prod
+              cloud_env: b-cld
             rule_files:
               - /var/vcap/jobs/bosh_alerts/*.alerts.yml
               - /var/vcap/jobs/cloudfoundry_alerts/*.alerts.yml

@@ -141,9 +141,9 @@ jobs:
       - deploy-prometheus.git/operators/monitor-cloudfoundry.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/prometheus-federation.yml
-      - deploy-prometheus.git/operators/prometheus-sandpit.yml
-      - deploy-prometheus.git/operators/prometheus-staging.yml
-      - deploy-prometheus.git/operators/prometheus-prod.yml
+      - deploy-prometheus.git/operators/prometheus-d-cld.yml
+      - deploy-prometheus.git/operators/prometheus-y-cld.yml
+      - deploy-prometheus.git/operators/prometheus-b-cld.yml
       - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       releases:
@@ -342,9 +342,9 @@ jobs:
       - deploy-prometheus.git/operators/monitor-cloudfoundry.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
       - deploy-prometheus.git/operators/prometheus-federation.yml
-      - deploy-prometheus.git/operators/prometheus-sandpit.yml
-      - deploy-prometheus.git/operators/prometheus-staging.yml
-      - deploy-prometheus.git/operators/prometheus-prod.yml
+      - deploy-prometheus.git/operators/prometheus-d-cld.yml
+      - deploy-prometheus.git/operators/prometheus-y-cld.yml
+      - deploy-prometheus.git/operators/prometheus-b-cld.yml
       - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
