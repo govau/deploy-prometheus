@@ -8,8 +8,6 @@
     vm_type: default
     persistent_disk: 10_240
     stemcell: default
-    provides:
-      prometheus: {as: prometheus_y_cld}
     networks:
       - name: default
     jobs:

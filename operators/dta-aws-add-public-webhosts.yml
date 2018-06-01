@@ -13,14 +13,12 @@
     sha1: 7898c1894c4b3254aa4a0ade0a02d33cf6c5c59a
 
 - type: replace
-  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  # path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  # value:
+  #   nginx: {from: nginx_grafana}
+  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?/nginx
   value:
-    nginx: {from: nginx-grafana}
-
-# remove standard nginx host
-- type: remove
-  path: /instance_groups/name=nginx
-  value:
+    from: nginx_grafana
 
 # add 3 new nginx hosts
 - type: replace
@@ -41,7 +39,9 @@
       - name: nginx
         release: prometheus
         provides:
-          nginx: {as: nginx-prometheus}
+          nginx: {as: nginx_prometheus}
+        consumes:
+          prometheus: {from: prometheus_monitoring_env}
         properties:
           nginx:
             alertmanager:
@@ -80,7 +80,9 @@
       - name: nginx
         release: prometheus
         provides:
-          nginx: {as: nginx-alertmanager}
+          nginx: {as: nginx_alertmanager}
+        consumes:
+          prometheus: {from: prometheus_monitoring_env}
         properties:
           nginx:
             alertmanager:
@@ -119,7 +121,9 @@
       - name: nginx
         release: prometheus
         provides:
-          nginx: {as: nginx-grafana}
+          nginx: {as: nginx_grafana}
+        consumes:
+          prometheus: {from: prometheus_monitoring_env}
         properties:
           nginx:
             alertmanager:

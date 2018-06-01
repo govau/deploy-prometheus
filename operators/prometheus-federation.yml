@@ -24,9 +24,12 @@
     prometheus: {as: prometheus_monitoring_env}
 
 - type: replace
-  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  # path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
+  # value:
+  #   prometheus: {from: prometheus_monitoring_env}
+  path: /instance_groups/name=grafana/jobs/name=grafana/consumes?/prometheus
   value:
-    prometheus: {from: prometheus_monitoring_env}
+    from: prometheus_monitoring_env
 
 - type: replace
   path: /instance_groups/name=nginx/jobs/name=nginx/consumes?

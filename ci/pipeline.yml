@@ -336,8 +336,6 @@ jobs:
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/bosh-dns-addon.yml
-      - deploy-prometheus.git/operators/remove-nginx-instance.yml
-      - deploy-prometheus.git/operators/dta-platform-add-public-webhosts.yml
       - deploy-prometheus.git/operators/monitor-certwatch.yml
       - deploy-prometheus.git/operators/monitor-cloudfoundry.yml
       - deploy-prometheus.git/operators/monitor-http-probe.yml
@@ -346,6 +344,8 @@ jobs:
       - deploy-prometheus.git/operators/prometheus-y-cld.yml
       - deploy-prometheus.git/operators/prometheus-b-cld.yml
       - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
+      - deploy-prometheus.git/operators/dta-aws-add-public-webhosts.yml
+      - deploy-prometheus.git/operators/remove-nginx-instance.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
       - ops.git/monitoring/alerts-cloud-gov-au-platform.yml
