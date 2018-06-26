@@ -6,7 +6,7 @@
 
 - type: replace
   path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/rule_files/-
-  value: /var/vcap/jobs/cloudfoundry_alerts/*.alerts
+  value: /var/vcap/jobs/cloudfoundry_alerts/*.alerts.yml
 
 # Grafana Dashboards
 - type: replace
