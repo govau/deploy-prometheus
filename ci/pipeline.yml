@@ -146,8 +146,6 @@ jobs:
       - deploy-prometheus.git/operators/prometheus-b-cld.yml
       - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
-      releases:
-      - prometheus-boshrelease.github-release/*.tgz
       stemcells:
       - stemcell/*.tgz
       vars:
@@ -353,8 +351,6 @@ jobs:
       - ops.git/monitoring/alerts-marketplace.yml
       - ops.git/monitoring/alerts-dashboard.yml
       - ops.git/monitoring/alerts-guides.yml
-      releases:
-      - prometheus-boshrelease.github-release/*.tgz
       stemcells:
       - stemcell/*.tgz
       vars:
