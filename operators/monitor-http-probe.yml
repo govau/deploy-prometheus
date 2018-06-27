@@ -59,7 +59,7 @@
               prober: http
               timeout: 5s
               http:
-                valid_status_codes: [400,401]
+                valid_status_codes: [400, 401, 403, 404]
                 no_follow_redirects: true
                 fail_if_ssl: false
                 fail_if_not_ssl: true
