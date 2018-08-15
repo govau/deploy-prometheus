@@ -4,5 +4,6 @@
   value:
     job_name: certwatch
     metrics_path: /metrics
+    scheme: https
     static_configs:
     - targets: [certmetrics.apps.y.cld.gov.au]
