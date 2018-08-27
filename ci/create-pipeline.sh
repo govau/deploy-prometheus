@@ -1,21 +1,17 @@
 #!/bin/bash
 
-set -e
-set -x
-
-CREDENTIALS=credentials.yml
+set -euxo pipefail
 
 if [[ ${TARGET} == "" ]]; then
   TARGET=local
 fi
 
-# Use target-specific credentials file if available
-if [[ -f credentials-${TARGET}.yml ]]; then
-  CREDENTIALS=credentials-${TARGET}.yml
-fi
-
 fly validate-pipeline --config pipeline.yml
 
-fly --target ${TARGET} set-pipeline --config pipeline.yml --pipeline prometheus -n -l $CREDENTIALS
+GEN_CREDENTIALS="$(./gen-credentials.sh)"
+
+fly -t ${TARGET} set-pipeline --config pipeline.yml --pipeline prometheus \
+  -l credentials.yml \
+  -l <(echo "$GEN_CREDENTIALS")
 
 fly -t ${TARGET} unpause-pipeline -p prometheus
