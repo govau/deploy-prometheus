@@ -13,41 +13,43 @@
   path: /addons?/-
   value:
     name: bosh-dns-aliases
-    release: bosh-dns-aliases
-    properties:
-      aliases:
-      - domain: alertmanager.prometheus
-        targets:
-        - query: '*'
-          instance_group: alertmanager
-          deployment: ((deployment-name))
-          network: Support
-          domain: bosh
-      - domain: prometheus.prometheus
-        targets:
-        - query: '*'
-          instance_group: prometheus2
-          deployment: ((deployment-name))
-          network: Support
-          domain: bosh
-      - domain: d-cld.prometheus
-        targets:
-        - query: '*'
-          instance_group: d-cld
-          deployment: ((deployment-name))
-          network: Support
-          domain: bosh
-      - domain: y-cld.prometheus
-        targets:
-        - query: '*'
-          instance_group: y-cld
-          deployment: ((deployment-name))
-          network: Support
-          domain: bosh
-      - domain: b-cld.prometheus
-        targets:
-        - query: '*'
-          instance_group: b-cld
-          deployment: ((deployment-name))
-          network: Support
-          domain: bosh
+    jobs:
+    - name: bosh-dns-aliases
+      release: bosh-dns-aliases
+      properties:
+        aliases:
+        - domain: alertmanager.prometheus
+          targets:
+          - query: '*'
+            instance_group: alertmanager
+            deployment: ((deployment-name))
+            network: Support
+            domain: bosh
+        - domain: prometheus.prometheus
+          targets:
+          - query: '*'
+            instance_group: prometheus2
+            deployment: ((deployment-name))
+            network: Support
+            domain: bosh
+        - domain: d-cld.prometheus
+          targets:
+          - query: '*'
+            instance_group: d-cld
+            deployment: ((deployment-name))
+            network: Support
+            domain: bosh
+        - domain: y-cld.prometheus
+          targets:
+          - query: '*'
+            instance_group: y-cld
+            deployment: ((deployment-name))
+            network: Support
+            domain: bosh
+        - domain: b-cld.prometheus
+          targets:
+          - query: '*'
+            instance_group: b-cld
+            deployment: ((deployment-name))
+            network: Support
+            domain: bosh
