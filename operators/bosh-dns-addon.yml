@@ -2,26 +2,52 @@
 # used with prometheus federation
 
 - type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/alertmanager.prometheus?
+  path: /releases/-
   value:
-  - "127.0.0.1"
+    name: bosh-dns-aliases
+    url: https://bosh.io/d/github.com/cloudfoundry/bosh-dns-aliases-release?v=0.0.3
+    version: 0.0.3
+    sha1: b0d0a0350ed87f1ded58b2ebb469acea0e026ccc
 
 - type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/prometheus.prometheus?
+  path: /addons/-
   value:
-  - "*.prometheus2.*.((deployment-name)).bosh"
-
-- type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/d-cld.prometheus?
-  value:
-  - "*.d-cld.*.((deployment-name)).bosh"
-
-- type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/y-cld.prometheus?
-  value:
-  - "*.y-cld.*.((deployment-name)).bosh"
-
-- type: replace
-  path: /addons/name=bosh-dns/jobs/name=bosh-dns/properties/aliases/b-cld.prometheus?
-  value:
-  - "*.b-cld.*.((deployment-name)).bosh"
+    name: bosh-dns-aliases
+    release: bosh-dns-aliases
+    properties:
+      aliases:
+      - domain: alertmanager.prometheus
+        targets:
+        - query: '*'
+          instance_group: alertmanager
+          deployment: ((deployment-name))
+          network: Support
+          domain: bosh
+      - domain: prometheus.prometheus
+        targets:
+        - query: '*'
+          instance_group: prometheus2
+          deployment: ((deployment-name))
+          network: Support
+          domain: bosh
+      - domain: d-cld.prometheus
+        targets:
+        - query: '*'
+          instance_group: d-cld
+          deployment: ((deployment-name))
+          network: Support
+          domain: bosh
+      - domain: y-cld.prometheus
+        targets:
+        - query: '*'
+          instance_group: y-cld
+          deployment: ((deployment-name))
+          network: Support
+          domain: bosh
+      - domain: b-cld.prometheus
+        targets:
+        - query: '*'
+          instance_group: b-cld
+          deployment: ((deployment-name))
+          network: Support
+          domain: bosh
