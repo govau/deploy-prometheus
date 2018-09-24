@@ -16,7 +16,7 @@ This *DTA* repository provides some custom operator files and a concourse pipeli
 ## DTA operators
 
 #### [bosh-dns-addon](operators/bosh-dns-addon.yml)
-- BOSH addon for BOSH-dns.  We use this for getting Prometheus federation working.
+- Configuration for BOSH-dns. We assume it has been added as an add-on in the bosh runtime-config. We use this for getting Prometheus federation working.
 
 #### [deployment-name](operators/deployment-name.yml)
 - The default deployment name `prometheus` is specified in the main deployment manifest.  This operator file allows you change the name - useful if you deploy more than 1 prometheus service.
