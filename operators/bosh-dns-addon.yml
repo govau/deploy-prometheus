@@ -1,8 +1,13 @@
 # Add BOSH-DNS to prometheus deployment
 # used with prometheus federation
-# In our cloud.gov.au environments we are using [runtime-configs/dns.yml](https://github.com/cloudfoundry/bosh-deployment/blob/master/runtime-configs/dns.yml) to add bosh-dns
-# If you are not, you should add a bosh-dns release here.
-    
+- type: replace
+  path: /releases/-
+  value:
+    name: "bosh-dns"
+    version: "1.9.0"
+    url: "https://bosh.io/d/github.com/cloudfoundry/bosh-dns-release?v=1.9.0"
+    sha1: "f7bd3bbfc499d20bf6031d028ec981ea78af12e4"
+
 - type: replace
   path: /addons?/-
   value:
