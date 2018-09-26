@@ -12,6 +12,8 @@
               prober: tcp
               timeout: 5s
               tcp:
+                preferred_ip_protocol: "ip4"
+                tls: true
                 query_response:
                   - expect: "^220 ([^ ]+) ESMTP (.+)$"
                   - send: "EHLO prober"
