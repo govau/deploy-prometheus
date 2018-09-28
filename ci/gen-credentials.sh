@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 # Fetches some credentials from each environment needed by `fly set-pipeline`
 # and dumps them to stdout
 
