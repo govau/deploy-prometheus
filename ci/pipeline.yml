@@ -139,8 +139,7 @@ jobs:
       - deploy-prometheus.git/operators/bosh-dns-addon.yml
       - deploy-prometheus.git/operators/monitor-certwatch.yml
       - deploy-prometheus.git/operators/monitor-cloudfoundry.yml
-      - deploy-prometheus.git/operators/monitor-http-probe.yml
-      - deploy-prometheus.git/operators/monitor-tcp-probe.yml
+      - deploy-prometheus.git/operators/monitor-probe.yml
       - deploy-prometheus.git/operators/prometheus-federation.yml
       - deploy-prometheus.git/operators/prometheus-d-cld.yml
       - deploy-prometheus.git/operators/prometheus-y-cld.yml
