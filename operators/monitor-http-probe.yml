@@ -64,6 +64,20 @@
                 fail_if_ssl: false
                 fail_if_not_ssl: true
                 preferred_ip_protocol: "ip4"
+            smtp_tcp_starttls:
+              prober: tcp
+              timeout: 5s
+              tcp:
+                query_response:
+                  - expect: "^220 ([^ ]+) ESMTP (.+)$"
+                  - send: "EHLO prober"
+                  - expect: "^250-STARTTLS"
+                  - send: "STARTTLS"
+                  - expect: "^220"
+                  - starttls: true
+                  - send: "EHLO prober"
+                  - expect: "^250-AUTH"
+                  - send: "QUIT"
 # Prometheus Scrape Config
 - type: replace
   path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
@@ -195,6 +209,31 @@
         - https_4xx
     static_configs:
       - targets: ((https_4xx_probe_endpoints))
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (.*)
+        target_label: __param_target
+        replacement: ${1}
+      - source_labels: [__param_target]
+        regex: (.*)
+        target_label: instance
+        replacement: ${1}
+      - source_labels: []
+        regex: .*
+        target_label: __address__
+        replacement: localhost:9115
+        
+# Probe the targets under tcp_smtp_probe_endpoints for availability and TLS.
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: blackbox_tcp_smtp_starttls
+    metrics_path: /probe
+    params:
+      module:
+        - smtp_tcp_starttls
+    static_configs:
+      - targets: ((tcp_smtp_probe_endpoints))
     relabel_configs:
       - source_labels: [__address__]
         regex: (.*)
