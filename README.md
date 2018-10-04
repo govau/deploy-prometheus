@@ -37,7 +37,7 @@ This *DTA* repository provides some custom operator files and a concourse pipeli
 - add cloudfoundry alerts to `prometheus2` instance.
 - add cloudfoundry dashboards to `grafana` instance.
 
-#### [monitor-http-probe](operators/monitor-http-probe.yml)
+#### [monitor-probe](operators/monitor-probe.yml)
 - black-box monitoring of urls
 
 #### [prometheus-federation](operators/prometheus-federation.yml)
