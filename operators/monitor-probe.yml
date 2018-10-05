@@ -78,6 +78,12 @@
                   - send: "EHLO prober"
                   - expect: "^250-AUTH"
                   - send: "QUIT"
+            tcp_tls_connect:
+              prober: tcp
+              timeout: 5s
+              tcp:
+                tls: true
+
 # Prometheus Scrape Config
 - type: replace
   path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
@@ -227,11 +233,36 @@
 - type: replace
   path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
   value:
-    job_name: blackbox_tcp_smtp_starttls
+    job_name: blackbox_tcp_starttls
     metrics_path: /probe
     params:
       module:
         - smtp_tcp_starttls
+    static_configs:
+      - targets: ((tcp_smtp_probe_endpoints))
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (.*)
+        target_label: __param_target
+        replacement: ${1}
+      - source_labels: [__param_target]
+        regex: (.*)
+        target_label: instance
+        replacement: ${1}
+      - source_labels: []
+        regex: .*
+        target_label: __address__
+        replacement: localhost:9115
+
+# Probe the targets under tcp_smtp_probe_endpoints for availability and TLS.
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/scrape_configs/-
+  value:
+    job_name: blackbox_tcp_tls
+    metrics_path: /probe
+    params:
+      module:
+        - tcp_tls_connect
     static_configs:
       - targets: ((tcp_smtp_probe_endpoints))
     relabel_configs:
