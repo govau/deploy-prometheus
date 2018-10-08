@@ -228,16 +228,10 @@
       - targets: ((tcp_smtp_probe_endpoints))
     relabel_configs:
       - source_labels: [__address__]
-        regex: (.*)
         target_label: __param_target
-        replacement: ${1}
       - source_labels: [__param_target]
-        regex: (.*)
         target_label: instance
-        replacement: ${1}
-      - source_labels: []
-        regex: .*
-        target_label: __address__
+      - target_label: __address__
         replacement: localhost:9115
 
 # Prometheus Alerts
