@@ -67,6 +67,8 @@
             tcp_tls_connect:
               prober: tcp
               timeout: 5s
+              tcp:
+                preferred_ip_protocol: "ip4"
 
 # Prometheus Scrape Config
 - type: replace
