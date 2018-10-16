@@ -351,6 +351,9 @@ jobs:
       - ops.git/monitoring/alerts-marketplace.yml
       - ops.git/monitoring/alerts-dashboard.yml
       - ops.git/monitoring/alerts-guides.yml
+      - ops.git/monitoring/alerts-comms.yml
+      - ops.git/monitoring/alerts-hasmtp.yml
+      - ops.git/monitoring/alerts-australia-gov-au.yml
       stemcells:
       - stemcell/*.tgz
       vars:
