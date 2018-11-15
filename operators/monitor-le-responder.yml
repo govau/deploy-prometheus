@@ -10,3 +10,18 @@
       - certs.d.cld.gov.au
       - certs.y.cld.gov.au
       - certs.b.cld.gov.au
+
+# Alerts
+- type: replace
+  path: /instance_groups/name=prometheus2/jobs/name=prometheus2/properties/prometheus/custom_rules?/-
+  value:
+    name: le-responder
+    rules:
+    - alert: LEResponderFailures
+      expr: "rate(le_responder_errors_total{}[3m]) != 0"
+      for: 1m
+      labels:
+        service: leresponder
+        team: cloud
+      annotations:
+        description: "le-responder in `{{$labels.instance}}` is showing errors for `{{$labels.task}}`"
