@@ -18,7 +18,7 @@
     name: le-responder
     rules:
     - alert: LEResponderFailures
-      expr: "rate(le_responder_errors_total{}[3m]) != 0"
+      expr: "le_responder_health{} != 0"
       for: 1m
       labels:
         service: leresponder
