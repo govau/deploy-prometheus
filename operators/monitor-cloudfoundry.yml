@@ -30,6 +30,9 @@
     scheme: https
     static_configs:
     - targets:
-      - kinesis.system.d.cld.gov.au
-      - kinesis.system.y.cld.gov.au
-      - kinesis.system.b.cld.gov.au
+      - kinesis-a.system.d.cld.gov.au
+      - kinesis-b.system.d.cld.gov.au
+      - kinesis-a.system.y.cld.gov.au
+      - kinesis-b.system.y.cld.gov.au
+      - kinesis-a.system.b.cld.gov.au
+      - kinesis-b.system.b.cld.gov.au
