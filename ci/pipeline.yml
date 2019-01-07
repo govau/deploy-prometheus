@@ -134,7 +134,8 @@ jobs:
       ops_files:
       - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
-      # - prometheus-boshrelease.src/manifests/operators/monitor-kubernetes.yml
+      - prometheus-boshrelease.src/manifests/operators/monitor-kubernetes.yml
+      - deploy-prometheus.git/operators/monitor-kubernetes-dta.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/bosh-dns-addon.yml
@@ -333,7 +334,8 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
-      # - prometheus-boshrelease.src/manifests/operators/monitor-kubernetes.yml
+      - prometheus-boshrelease.src/manifests/operators/monitor-kubernetes.yml
+      - deploy-prometheus.git/operators/monitor-kubernetes-dta.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/bosh-dns-addon.yml
