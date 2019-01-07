@@ -7,11 +7,7 @@ if [[ ${TARGET} == "" ]]; then
 fi
 
 fly validate-pipeline --config pipeline.yml
+./gen-credentials.sh
 
-GEN_CREDENTIALS="$(./gen-credentials.sh)"
-
-fly -t ${TARGET} set-pipeline --config pipeline.yml --pipeline prometheus \
-  -l credentials.yml \
-  -l <(echo "$GEN_CREDENTIALS")
-
+fly -t ${TARGET} set-pipeline --config pipeline.yml --pipeline prometheus
 fly -t ${TARGET} unpause-pipeline -p prometheus

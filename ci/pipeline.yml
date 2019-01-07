@@ -21,7 +21,7 @@ resources:
     branch: master
     paths:
     - monitoring/*.yml
-    private_key: ((ops-git-deploy-key))
+    private_key: ((ops-git-deploy-key.private_key))
     uri: git@github.com:AusDTO/ops.git
 - name: slack
   type: slack-notification
@@ -30,7 +30,7 @@ resources:
 - name: deployment-dev
   type: bosh2-deployment
   source:
-    ca_cert: ((bosh_ca_cert))
+    ca_cert: ((bosh_ca_cert.certificate))
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
     deployment: prometheus-dev
@@ -38,7 +38,7 @@ resources:
 - name: deployment
   type: bosh2-deployment
   source:
-    ca_cert: ((bosh_ca_cert))
+    ca_cert: ((bosh_ca_cert.certificate))
     client: ((bosh_client))
     client_secret: ((bosh_client_secret))
     deployment: prometheus
@@ -134,6 +134,7 @@ jobs:
       ops_files:
       - prometheus-boshrelease.src/manifests/operators/monitor-bosh.yml
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
+      # - prometheus-boshrelease.src/manifests/operators/monitor-kubernetes.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/bosh-dns-addon.yml
@@ -150,14 +151,14 @@ jobs:
       stemcells:
       - stemcell/*.tgz
       vars:
-        bosh_ca_cert: ((bosh_ca_cert))
+        bosh_ca_cert: ((bosh_ca_cert.certificate))
         bosh_client: ((bosh_client))
         bosh_client_secret: ((bosh_client_secret))
         bosh_url: ((bosh_target))
         deployment-name: prometheus-dev
         metrics_environment: m-cld-dev
         b_cld_api_url: ((b_cld_api_url))
-        b_cld_bosh_ca_cert: ((b_cld_bosh_ca_cert))
+        b_cld_bosh_ca_cert: ((b_cld_bosh_ca_cert.certificate))
         b_cld_bosh_client: ((b_cld_bosh_client))
         b_cld_bosh_client_secret: ((b_cld_bosh_client_secret))
         b_cld_bosh_url: ((b_cld_bosh_url))
@@ -167,7 +168,7 @@ jobs:
         b_cld_uaa_clients_firehose_exporter_secret: ((b_cld_uaa_clients_firehose_exporter_secret))
         b_cld_uaa_url: ((b_cld_uaa_url))
         d_cld_api_url: ((d_cld_api_url))
-        d_cld_bosh_ca_cert: ((d_cld_bosh_ca_cert))
+        d_cld_bosh_ca_cert: ((d_cld_bosh_ca_cert.certificate))
         d_cld_bosh_client: ((d_cld_bosh_client))
         d_cld_bosh_client_secret: ((d_cld_bosh_client_secret))
         d_cld_bosh_url: ((d_cld_bosh_url))
@@ -178,7 +179,7 @@ jobs:
         d_cld_uaa_url: ((d_cld_uaa_url))
         skip_ssl_verify: false
         y_cld_api_url: ((y_cld_api_url))
-        y_cld_bosh_ca_cert: ((y_cld_bosh_ca_cert))
+        y_cld_bosh_ca_cert: ((y_cld_bosh_ca_cert.certificate))
         y_cld_bosh_client: ((y_cld_bosh_client))
         y_cld_bosh_client_secret: ((y_cld_bosh_client_secret))
         y_cld_bosh_url: ((y_cld_bosh_url))
@@ -231,7 +232,7 @@ jobs:
       inputs:
       - name: deploy-prometheus.git
     params:
-      BOSH_CA_CERT: ((bosh_ca_cert))
+      BOSH_CA_CERT: ((bosh_ca_cert.certificate))
       BOSH_CLIENT: ((bosh_client))
       BOSH_CLIENT_SECRET: ((bosh_client_secret))
       BOSH_DEPLOYMENT: prometheus-dev
@@ -332,6 +333,7 @@ jobs:
       - prometheus-boshrelease.src/manifests/operators/alertmanager-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/prometheus-web-external-url.yml
       - prometheus-boshrelease.src/manifests/operators/monitor-concourse.yml
+      # - prometheus-boshrelease.src/manifests/operators/monitor-kubernetes.yml
       - deploy-prometheus.git/operators/use-uaa-with-bosh.yml
       - deploy-prometheus.git/operators/deployment-name.yml
       - deploy-prometheus.git/operators/bosh-dns-addon.yml
@@ -363,14 +365,14 @@ jobs:
         alertmanager_pagerduty_service_key_marketplace: ((alertmanager_pagerduty_service_key_marketplace))
         alertmanager_slack_api_url: ((alertmanager_slack_api_url))
         alertmanager_web_external_url: ((alertmanager_web_external_url))
-        bosh_ca_cert: ((bosh_ca_cert))
+        bosh_ca_cert: ((bosh_ca_cert.certificate))
         bosh_client: ((bosh_client))
         bosh_client_secret: ((bosh_client_secret))
         bosh_url: ((bosh_target))
         deployment-name: prometheus
         metrics_environment: m-cld
         b_cld_api_url: ((b_cld_api_url))
-        b_cld_bosh_ca_cert: ((b_cld_bosh_ca_cert))
+        b_cld_bosh_ca_cert: ((b_cld_bosh_ca_cert.certificate))
         b_cld_bosh_client: ((b_cld_bosh_client))
         b_cld_bosh_client_secret: ((b_cld_bosh_client_secret))
         b_cld_bosh_url: ((b_cld_bosh_url))
@@ -381,7 +383,7 @@ jobs:
         b_cld_uaa_url: ((b_cld_uaa_url))
         prometheus_web_external_url: ((prometheus_web_external_url))
         d_cld_api_url: ((d_cld_api_url))
-        d_cld_bosh_ca_cert: ((d_cld_bosh_ca_cert))
+        d_cld_bosh_ca_cert: ((d_cld_bosh_ca_cert.certificate))
         d_cld_bosh_client: ((d_cld_bosh_client))
         d_cld_bosh_client_secret: ((d_cld_bosh_client_secret))
         d_cld_bosh_url: ((d_cld_bosh_url))
@@ -392,7 +394,7 @@ jobs:
         d_cld_uaa_url: ((d_cld_uaa_url))
         skip_ssl_verify: false
         y_cld_api_url: ((y_cld_api_url))
-        y_cld_bosh_ca_cert: ((y_cld_bosh_ca_cert))
+        y_cld_bosh_ca_cert: ((y_cld_bosh_ca_cert.certificate))
         y_cld_bosh_client: ((y_cld_bosh_client))
         y_cld_bosh_client_secret: ((y_cld_bosh_client_secret))
         y_cld_bosh_url: ((y_cld_bosh_url))
