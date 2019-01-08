@@ -189,6 +189,13 @@ jobs:
         y_cld_uaa_clients_cf_exporter_secret: ((y_cld_uaa_clients_cf_exporter_secret))
         y_cld_uaa_clients_firehose_exporter_secret: ((y_cld_uaa_clients_firehose_exporter_secret))
         y_cld_uaa_url: ((y_cld_uaa_url))
+        kubernetes_bearer_token: "((kubernetes_bearer_token))"
+        kubernetes_apiserver_scheme: "((kubernetes_apiserver_scheme))"
+        kubernetes_apiserver_ip: "((kubernetes_apiserver_ip))"
+        kubernetes_apiserver_port: "((kubernetes_apiserver_port))"
+        kubernetes_kubeconfig: "((kubernetes_kubeconfig))"
+        kubernetes_apiserver_ca: |
+          ((kubernetes_apiserver_ca.certificate))
       vars_files:
       - ops.git/monitoring/probe_endpoints.yml
   on_failure:
@@ -405,6 +412,13 @@ jobs:
         y_cld_uaa_clients_cf_exporter_secret: ((y_cld_uaa_clients_cf_exporter_secret))
         y_cld_uaa_clients_firehose_exporter_secret: ((y_cld_uaa_clients_firehose_exporter_secret))
         y_cld_uaa_url: ((y_cld_uaa_url))
+        kubernetes_bearer_token: "((kubernetes_bearer_token))"
+        kubernetes_apiserver_scheme: "((kubernetes_apiserver_scheme))"
+        kubernetes_apiserver_ip: "((kubernetes_apiserver_ip))"
+        kubernetes_apiserver_port: "((kubernetes_apiserver_port))"
+        kubernetes_kubeconfig: "((kubernetes_kubeconfig))"
+        kubernetes_apiserver_ca: |
+          ((kubernetes_apiserver_ca.certificate))
       vars_files:
       - dns-details/dns-vars.yml
       - tls-details/tls-certs.yml
