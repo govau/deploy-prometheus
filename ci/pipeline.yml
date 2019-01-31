@@ -1,6 +1,6 @@
 groups: []
 resources:
-- name: stemcell
+- name: stemcell-x
   type: bosh-io-stemcell
   source:
     name: bosh-aws-xen-hvm-ubuntu-xenial-go_agent
@@ -110,7 +110,7 @@ jobs:
   - prometheus-dev
   plan:
   - aggregate:
-    - get: stemcell
+    - get: stemcell-x
     - get: slack
       passed:
       - fetch
@@ -150,7 +150,7 @@ jobs:
       - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
       stemcells:
-      - stemcell/*.tgz
+      - stemcell-x/*.tgz
       vars:
         bosh_ca_cert: ((bosh_ca_cert.certificate))
         bosh_client: ((bosh_client))
@@ -255,7 +255,7 @@ jobs:
 - name: ship-it-prod
   plan:
   - aggregate:
-    - get: stemcell
+    - get: stemcell-x
       passed:
       - test-it
     - get: prometheus-boshrelease.github-release
@@ -274,7 +274,7 @@ jobs:
   - prometheus
   plan:
   - aggregate:
-    - get: stemcell
+    - get: stemcell-x
       passed:
       - ship-it-prod
       trigger: true
@@ -368,7 +368,7 @@ jobs:
       - ops.git/monitoring/alerts-hasmtp.yml
       - ops.git/monitoring/alerts-australia-gov-au.yml
       stemcells:
-      - stemcell/*.tgz
+      - stemcell-x/*.tgz
       vars:
         alertmanager_pagerduty_service_key_cloud: ((alertmanager_pagerduty_service_key_cloud))
         alertmanager_pagerduty_service_key_marketplace: ((alertmanager_pagerduty_service_key_marketplace))
