@@ -8,9 +8,17 @@
   path: /releases/-
   value:
     name: haproxy
-    version: 8.7.0
-    url: https://github.com/cloudfoundry-incubator/haproxy-boshrelease/releases/download/v8.7.0/haproxy-8.7.0.tgz
-    sha1: 7898c1894c4b3254aa4a0ade0a02d33cf6c5c59a
+    version: 9.5.0
+    url: https://github.com/cloudfoundry-incubator/haproxy-boshrelease/releases/download/v9.5.0/haproxy-9.5.0.tgz
+    sha1: 651abdeb879f1b5cd3f59a231cb9102b41ffaafd
+
+- type: replace
+  path: /releases/-
+  value:
+    name: "bpm"
+    version: "1.0.4"
+    url: "https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=1.0.4"
+    sha1: "41df19697d6a69d2552bc2c132928157fa91abe0"
 
 - type: replace
   # path: /instance_groups/name=grafana/jobs/name=grafana/consumes?
@@ -52,6 +60,8 @@
               auth_users:
                 - name: admin
                   password: ((prometheus_password))
+      - name: bpm
+        release: bpm
       - name: haproxy
         release: haproxy
         properties:
@@ -93,6 +103,8 @@
               auth_users:
                 - name: admin
                   password: ((prometheus_password))
+      - name: bpm
+        release: bpm
       - name: haproxy
         release: haproxy
         properties:
@@ -134,6 +146,8 @@
               auth_users:
                 - name: admin
                   password: ((prometheus_password))
+      - name: bpm
+        release: bpm
       - name: haproxy
         release: haproxy
         properties:
