@@ -26,8 +26,10 @@
         release: prometheus
         properties:
           firehose_exporter:
-            doppler:
+            logging:
               url: ((y_cld_doppler_url))
+              use_legacy_firehose: true
+            doppler:
               subscription_id: "((y_cld_metrics_environment))-((deployment-name))"
               max_retry_count: 300
             uaa:
