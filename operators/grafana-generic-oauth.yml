@@ -1,0 +1,19 @@
+---
+# we need to set root_url in order for reply URL to work correctly
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=grafana/properties/grafana/server?/root_url
+  value: "((grafana_web_external_url))"
+
+
+# Azure AD settings
+- type: replace
+  path: /instance_groups/name=grafana/jobs/name=grafana/properties/grafana/auth?/generic_oauth
+  value:
+    enabled: true
+    allow_sign_up: true
+    auth_url: "((grafana_oauth_auth_url))"
+    client_id: "((grafana_oauth_client_id))"
+    client_secret: "((grafana_oauth_client_secret))"
+    name: "((grafana_oauth_name))"
+    scopes: "openid email"
+    token_url: "((grafana_oauth_token_url))"

@@ -149,6 +149,7 @@ jobs:
       - deploy-prometheus.git/operators/prometheus-b-cld.yml
       - deploy-prometheus.git/operators/dta-aws-cloud-config.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
+      - deploy-prometheus.git/operators/grafana-generic-oauth.yml
       stemcells:
       - stemcell-x/*.tgz
       vars:
@@ -196,6 +197,12 @@ jobs:
         kubernetes_kubeconfig: "((kubernetes_kubeconfig))"
         kubernetes_apiserver_ca: |
           ((kubernetes_apiserver_ca.certificate))
+        grafana_web_external_url: "((grafana_web_external_url))"
+        grafana_oauth_auth_url: "((grafana_oauth_auth_url))"
+        grafana_oauth_client_id: "((grafana_oauth_client_id))"
+        grafana_oauth_client_secret: "((grafana_oauth_client_secret))"
+        grafana_oauth_name: "((grafana_oauth_name))"
+        grafana_oauth_token_url: "((grafana_oauth_token_url))"
       vars_files:
       - ops.git/monitoring/probe_endpoints.yml
   on_failure:
@@ -358,6 +365,7 @@ jobs:
       - deploy-prometheus.git/operators/dta-aws-add-public-webhosts.yml
       - deploy-prometheus.git/operators/remove-nginx-instance.yml
       - deploy-prometheus.git/operators/increase-prometheus-global-scrape-timeout.yml
+      - deploy-prometheus.git/operators/grafana-generic-oauth.yml
       - ops.git/monitoring/alertmanager-receivers-and-routes.yml
       - ops.git/monitoring/alerts-cloud-gov-au-platform.yml
       - ops.git/monitoring/alerts-cloud-gov-au-services.yml
@@ -419,6 +427,12 @@ jobs:
         kubernetes_kubeconfig: "((kubernetes_kubeconfig))"
         kubernetes_apiserver_ca: |
           ((kubernetes_apiserver_ca.certificate))
+        grafana_web_external_url: "((grafana_web_external_url))"
+        grafana_oauth_auth_url: "((grafana_oauth_auth_url))"
+        grafana_oauth_client_id: "((grafana_oauth_client_id))"
+        grafana_oauth_client_secret: "((grafana_oauth_client_secret))"
+        grafana_oauth_name: "((grafana_oauth_name))"
+        grafana_oauth_token_url: "((grafana_oauth_token_url))"
       vars_files:
       - dns-details/dns-vars.yml
       - tls-details/tls-certs.yml
