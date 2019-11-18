@@ -7,7 +7,7 @@ resources:
 - name: prometheus-boshrelease.github-release
   type: github-release
   source:
-    access_token: ((github-read-public-repos-token))
+    access_token: ((github-public-repo-personal-access-token))
     owner: bosh-prometheus
     repository: prometheus-boshrelease
 - name: deploy-prometheus.git
@@ -26,7 +26,7 @@ resources:
 - name: slack
   type: slack-notification
   source:
-    url: ((concourse-slack-webhook-url))
+    url: ((slack-webhook-url))
 - name: deployment-dev
   type: bosh2-deployment
   source:
